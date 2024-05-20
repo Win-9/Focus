@@ -61,7 +61,7 @@ jobs:
           password: ${{ secrets.PASS_WORD }}
           port: ${{ secrets.PORT }}
           source: "*.jar"
-          target: ${{ secret.REMOTE_DIRECTORY }}
+          target: ${{ secrets.REMOTE_DIRECTORY }}
 
       - name: 원격 서버에서 애플리케이션 실행
         uses: appleboy/ssh-action@v1.0.3
