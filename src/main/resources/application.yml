@@ -4,15 +4,18 @@ spring:
   config:
     import:
       - "env/mysql.yml"
+      - "env/port.yml"
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${mysql_endpoint}
     username: ${mysql_username}
     password: ${mysql_password}
-
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     open-in-view: false
     show-sql: true
     hibernate:
       ddl-auto: update
+
+server:
+  port: ${port}
