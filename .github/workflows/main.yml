@@ -54,7 +54,7 @@ jobs:
           name: focus-jar
 
       - name: 원격 서버로 JAR 파일 전송
-        uses: appleboy/scp-action@master
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER_NAME }}
