@@ -21,6 +21,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: properties 설정
+        run: |
+          mkdir -p ./src/main/resources/env
+          touch ./src/main/resources/env/mysql.yml
+          printf "%s" "${{ secrets.MYSQL}}" > ./src/main/resources/env/mysql.yml
+
       - name: gradlew 권한 설정
         run: |
           chmod +x ./gradlew
