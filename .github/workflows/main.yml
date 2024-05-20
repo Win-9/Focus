@@ -70,6 +70,8 @@ jobs:
           username: ${{ secrets.USER_NAME }}
           password: ${{ secrets.PASS_WORD }}
           port: ${{ secrets.PORT }}
+          timeout: 70s
+          proxy_timeout: 70s
           script: |
             chmod +x ${{ secrets.REMOTE_DIRECTORY }}/deploy.sh
             sh ${{ secrets.REMOTE_DIRECTORY }}/deploy.sh
