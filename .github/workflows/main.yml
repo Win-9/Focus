@@ -45,7 +45,7 @@ jobs:
             build/libs/*.jar
 
   deploy:
-    needs: build-and-deploy
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: JAR 파일 다운로드
