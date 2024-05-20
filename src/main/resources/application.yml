@@ -1,0 +1,11 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  config:
+    import:
+      - "env/mysql.yml"
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${mysql_endpoint}
+    username: ${mysql_username}
+    password: ${mysql_password}
