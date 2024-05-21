@@ -16,6 +16,6 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
-
-server:
-  port: ${port}
+#
+#server:
+#  port: ${port}
