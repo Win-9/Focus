@@ -1,0 +1,17 @@
+{
+  "type": "record",
+  "name": "aa",
+  "namespace": "org.example.focus.entity",
+  "fields": [
+    {"name": "id", "type": "long"},
+    {"name": "date", "type": "string"}, // LocalDateTime을 문자열로 처리
+    {"name": "page", "type": "int"},
+    {"name": "thumbnailImage", "type": "string"},
+    {"name": "text", "type": "string"},
+    {
+      "name": "book",
+      "type": ["null", "a"], // BookMark는 Book에 대한 참조를 포함할 수 있습니다.
+      "default": null
+    }
+  ]
+}
