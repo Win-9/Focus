@@ -1,0 +1,11 @@
+{
+    "name": "a",
+    "namespace": "org.example.focus.entity",
+    "type": "record",
+    "fields": [
+        {"name": "id", "type": "long"},
+        {"name": "title", "type": "string"},
+        {"name": "author", "type": "string"},
+        {"name": "coverImage", "type": "string"}
+    ]
+}
