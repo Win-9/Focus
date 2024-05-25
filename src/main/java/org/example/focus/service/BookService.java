@@ -2,7 +2,9 @@ package org.example.focus.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.focus.common.BaseResponse;
+import org.example.focus.dto.request.BookCoverRequestDto;
 import org.example.focus.dto.resopnse.CalendarReadInfoResponseDto;
+import org.example.focus.entity.Book;
 import org.example.focus.repsitory.BookRepository;
 import org.springframework.stereotype.Service;
 
@@ -29,5 +31,14 @@ public class BookService {
                 .distinct()
                 .collect(Collectors.toList());
         return BaseResponse.success(CalendarReadInfoResponseDto.of(readDateList, year, month));
+    }
+
+    public void processBook(BookCoverRequestDto request) {
+        Book book = Book.builder()
+                .title(request.getTitle())
+                .author(request.getAuthor())
+                .coverImage(request.getCoverImage())
+                .build();
+        bookRepository.save(book);
     }
 }
