@@ -3,9 +3,12 @@ package org.example.focus.controller;
 import lombok.RequiredArgsConstructor;
 import org.example.focus.common.BaseResponse;
 import org.example.focus.dto.request.BookCoverRequestDto;
+import org.example.focus.dto.resopnse.BookListResponseDto;
 import org.example.focus.dto.resopnse.CalendarReadInfoResponseDto;
 import org.example.focus.service.BookService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController("/api")
 @RequiredArgsConstructor
@@ -21,5 +24,10 @@ public class BookController {
     public BaseResponse<Object> addBook(@RequestBody BookCoverRequestDto bookCoverRequestDto) {
         bookService.processBook(bookCoverRequestDto);
         return BaseResponse.success();
+    }
+
+    @GetMapping("/book/list")
+    public BaseResponse<List<BookListResponseDto>> getBookList() {
+        return bookService.showBookList();
     }
 }
