@@ -9,5 +9,5 @@ import java.util.List;
 public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findByRegisteredDateBetween(LocalDateTime startDate, LocalDateTime endDate);
 
-    List<Book> findAllOrderBymodifiedDateDesc();
+    List<Book> findAllByOrderByModifiedDateDesc();
 }
