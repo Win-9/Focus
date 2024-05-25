@@ -44,7 +44,7 @@ public class BookService {
     }
 
     public BaseResponse<List<BookListResponseDto>> showBookList() {
-        List<Book> bookList = bookRepository.findAll();
+        List<Book> bookList = bookRepository.findAllOrderBymodifiedDateDesc();
         return BaseResponse.success(
                 bookList.stream()
                         .map(b -> BookListResponseDto.from(b))
