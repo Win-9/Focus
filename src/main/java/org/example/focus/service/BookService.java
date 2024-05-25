@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,10 +24,10 @@ public class BookService {
                 .withSecond(59);
 
         // 책을 읽은 날짜 추축
-        List<LocalDate> readDateList = bookRepository.findCreatedDateBetween(startDate, endDate)
+        List<LocalDate> readDateList = bookRepository.findByRegisteredDateBetween(startDate, endDate)
                 .stream().map(a -> a.getRegisteredDate().toLocalDate())
                 .distinct()
-                .toList();
+                .collect(Collectors.toList());
         return BaseResponse.success(CalendarReadInfoResponseDto.of(readDateList, year, month));
     }
 }
