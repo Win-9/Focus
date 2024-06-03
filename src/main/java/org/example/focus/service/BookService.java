@@ -3,11 +3,14 @@ package org.example.focus.service;
 import lombok.RequiredArgsConstructor;
 import org.example.focus.common.BaseResponse;
 import org.example.focus.dto.request.BookCoverRequestDto;
+import org.example.focus.dto.request.ImageRequestDto;
 import org.example.focus.dto.resopnse.BookListResponseDto;
 import org.example.focus.dto.resopnse.CalendarReadInfoResponseDto;
 import org.example.focus.entity.Book;
 import org.example.focus.repsitory.BookRepository;
+import org.example.focus.util.FileRequestService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,6 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BookService {
     private final BookRepository bookRepository;
+    private final FileRequestService fileRequestService;
 
     public BaseResponse<CalendarReadInfoResponseDto> showCalendarData(int year, int month) {
         LocalDateTime startDate = LocalDateTime.of(year, month, 1, 0, 0, 0);
@@ -34,12 +38,13 @@ public class BookService {
         return BaseResponse.success(CalendarReadInfoResponseDto.of(readDateList, year, month));
     }
 
-    public void processBook(BookCoverRequestDto request) {
+    public void processBook(BookCoverRequestDto request, MultipartFile file) {
         Book book = Book.builder()
                 .title(request.getTitle())
                 .author(request.getAuthor())
-                .coverImage(request.getCoverImage())
                 .build();
+
+        String str = fileRequestService.sendBookCoverImageReqeust(ImageRequestDto.of(request), file);
         bookRepository.save(book);
     }
 

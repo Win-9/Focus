@@ -7,10 +7,12 @@ import org.example.focus.dto.resopnse.BookListResponseDto;
 import org.example.focus.dto.resopnse.CalendarReadInfoResponseDto;
 import org.example.focus.service.BookService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@RestController("/api")
+@RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class BookController {
     private final BookService bookService;
@@ -21,8 +23,9 @@ public class BookController {
     }
 
     @PostMapping("/book")
-    public BaseResponse<Object> addBook(@RequestBody BookCoverRequestDto bookCoverRequestDto) {
-        bookService.processBook(bookCoverRequestDto);
+    public BaseResponse<Object> addBook(@RequestPart(value = "request") BookCoverRequestDto bookCoverRequestDto,
+                                        @RequestPart(value = "file") MultipartFile multipartFile) {
+        bookService.processBook(bookCoverRequestDto, multipartFile);
         return BaseResponse.success();
     }
 
