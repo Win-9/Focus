@@ -11,11 +11,11 @@ public class ImageRequestDto {
     private String extension;
     private int page;
 
-    public static ImageRequestDto of(BookCoverRequestDto requestDto) {
+    public static ImageRequestDto of(BookCoverRequestDto requestDto, String extension) {
         return ImageRequestDto.builder()
                 .title(requestDto.getTitle())
                 .form("bookCover")
-                .extension(requestDto.getExtension())
+                .extension(extension)
                 .build();
     }
 }

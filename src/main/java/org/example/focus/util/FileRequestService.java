@@ -16,8 +16,6 @@ public class FileRequestService {
 
     private final RestTemplate restTemplate = new RestTemplate();
     public String sendBookCoverImageReqeust(ImageRequestDto request, MultipartFile file) {
-        String url = "http://localhost:2022/api/image";
-
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
@@ -27,7 +25,7 @@ public class FileRequestService {
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
         ResponseEntity<String> response = restTemplate.postForEntity(
-                url,
+                EncryptUtil.imageSaveUrl,
                 requestEntity,
                 String.class);
 

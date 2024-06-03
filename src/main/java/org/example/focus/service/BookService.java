@@ -8,6 +8,7 @@ import org.example.focus.dto.resopnse.BookListResponseDto;
 import org.example.focus.dto.resopnse.CalendarReadInfoResponseDto;
 import org.example.focus.entity.Book;
 import org.example.focus.repsitory.BookRepository;
+import org.example.focus.util.EncryptUtil;
 import org.example.focus.util.FileRequestService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -39,12 +41,21 @@ public class BookService {
     }
 
     public void processBook(BookCoverRequestDto request, MultipartFile file) {
+        String originalFilename = file.getOriginalFilename();
+        String extension = "";
+
+        if (originalFilename != null && originalFilename.contains(".")) {
+            extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+        }
+
         Book book = Book.builder()
                 .title(request.getTitle())
                 .author(request.getAuthor())
+                .coverImage(EncryptUtil.imageAccessUrl + request.getTitle() + "/" +
+                        request.getTitle() + "bookCover." + extension)
                 .build();
 
-        String str = fileRequestService.sendBookCoverImageReqeust(ImageRequestDto.of(request), file);
+        fileRequestService.sendBookCoverImageReqeust(ImageRequestDto.of(request, extension),file);
         bookRepository.save(book);
     }
 

@@ -7,6 +7,5 @@ public class BookCoverRequestDto {
     private String title;
     private String author;
     private String form;
-    private String extension;
     private int page;
 }
