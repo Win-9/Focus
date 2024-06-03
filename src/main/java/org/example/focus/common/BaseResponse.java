@@ -1,10 +1,15 @@
 package org.example.focus.common;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @AllArgsConstructor
+@Getter
 public class BaseResponse <T> {
     private String message;
+
+    @JsonIgnore
     private T data;
 
     public BaseResponse(String message) {
