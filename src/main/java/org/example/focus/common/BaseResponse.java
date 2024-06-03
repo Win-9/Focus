@@ -1,6 +1,6 @@
 package org.example.focus.common;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -9,7 +9,7 @@ import lombok.Getter;
 public class BaseResponse <T> {
     private String message;
 
-    @JsonIgnore
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private T data;
 
     public BaseResponse(String message) {
