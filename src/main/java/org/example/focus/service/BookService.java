@@ -53,6 +53,8 @@ public class BookService {
                 .author(request.getAuthor())
                 .coverImage(EncryptUtil.imageAccessUrl + request.getTitle() + "/" +
                         request.getTitle() + "bookCover." + extension)
+                .modifiedDate(LocalDateTime.now())
+                .registeredDate(LocalDateTime.now())
                 .build();
 
         fileRequestService.sendBookCoverImageReqeust(ImageRequestDto.of(request, extension),file);
