@@ -2,6 +2,7 @@ package org.example.focus.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.focus.dto.resopnse.AllBookMarkResponseDto;
+import org.example.focus.dto.resopnse.BookMarkResponseDto;
 import org.example.focus.entity.BookMark;
 import org.example.focus.repsitory.BookMarkRepository;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,9 @@ public class BookMarkService {
                 .toList();
     }
 
-    public void showBookMark(Long bookMarkId) {
-        bookMarkRepository.findById(bookMarkId)
-                .map(bookMark -> AllBookMarkResponseDto.from(bookMark));
+    public BookMarkResponseDto showBookMark(Long bookMarkId) {
+        return bookMarkRepository.findById(bookMarkId)
+                .map(b -> BookMarkResponseDto.from(b))
+                .get();
     }
 }
