@@ -1,5 +1,6 @@
 package org.example.focus.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.example.focus.common.BaseResponse;
 import org.example.focus.dto.resopnse.BookMarkResponseDto;
@@ -18,8 +19,13 @@ public class BookMarkController {
     private final BookMarkService bookMarkService;
 
     @GetMapping("/bookmark/{bookId}")
-    public BaseResponse<List<BookMarkResponseDto>> getBookMark(@PathVariable Long bookId) {
+    public BaseResponse<List<BookMarkResponseDto>> getBookMarkList(@PathVariable Long bookId) {
         List<BookMarkResponseDto> response = bookMarkService.showBookMarkList(bookId);
         return BaseResponse.success(response);
+    }
+
+    @GetMapping("/bookmark/{bookId}/{bookMarkId}")
+    public void getBookMark(@PathVariable Long bookId) {
+        bookMarkService.showBookMark(bookId);
     }
 }
