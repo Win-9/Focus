@@ -8,14 +8,14 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-public class BookMarkResponseDto {
+public class AllBookMarkResponseDto {
     private Long id;
     private String thumbnailImage;
     private LocalDateTime date;
     private int page;
 
-    public static BookMarkResponseDto from(BookMark bookMark) {
-        return BookMarkResponseDto.builder()
+    public static AllBookMarkResponseDto from(BookMark bookMark) {
+        return AllBookMarkResponseDto.builder()
                 .id(bookMark.getId())
                 .thumbnailImage(bookMark.getThumbnailImage())
                 .date(bookMark.getDate())
