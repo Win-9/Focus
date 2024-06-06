@@ -15,7 +15,7 @@ public class BookMarkService {
     private final BookMarkRepository bookMarkRepository;
 
     public List<AllBookMarkResponseDto> showBookMarkList(Long bookId) {
-        List<BookMark> bookMarkList = bookMarkRepository.findAllByIdOrderByDateAsc(bookId);
+        List<BookMark> bookMarkList = bookMarkRepository.findAllByBookIdOrderByDateAsc(bookId);
         return bookMarkList.stream()
                 .map(b -> AllBookMarkResponseDto.from(b))
                 .toList();
