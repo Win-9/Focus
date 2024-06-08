@@ -57,7 +57,7 @@ public class BookService {
                 .registeredDate(LocalDateTime.now())
                 .build();
 
-        fileRequestService.sendBookCoverImageReqeust(ImageRequestDto.of(request, extension),file);
+        fileRequestService.sendBookImageReqeust(ImageRequestDto.of(request, extension),file);
         bookRepository.save(book);
     }
 

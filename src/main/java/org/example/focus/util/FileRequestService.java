@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileRequestService {
 
     private final RestTemplate restTemplate = new RestTemplate();
-    public String sendBookCoverImageReqeust(ImageRequestDto request, MultipartFile file) {
+    public String sendBookImageReqeust(ImageRequestDto request, MultipartFile file) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
