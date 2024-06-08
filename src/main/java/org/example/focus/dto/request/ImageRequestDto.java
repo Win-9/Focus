@@ -18,4 +18,13 @@ public class ImageRequestDto {
                 .extension(extension)
                 .build();
     }
+
+    public static ImageRequestDto of(BookMarkRequestDto requestDto, String extension) {
+        return ImageRequestDto.builder()
+                .title(requestDto.getTitle())
+                .form("bookMark")
+                .extension(extension)
+                .page(requestDto.getPage())
+                .build();
+    }
 }

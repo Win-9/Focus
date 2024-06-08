@@ -1,11 +1,15 @@
 package org.example.focus.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.focus.dto.request.BookMarkRequestDto;
+import org.example.focus.dto.request.ImageRequestDto;
 import org.example.focus.dto.resopnse.AllBookMarkResponseDto;
 import org.example.focus.dto.resopnse.BookMarkResponseDto;
 import org.example.focus.entity.BookMark;
 import org.example.focus.repsitory.BookMarkRepository;
+import org.example.focus.util.FileRequestService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -13,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookMarkService {
     private final BookMarkRepository bookMarkRepository;
+    private final FileRequestService fileRequestService;
 
     public List<AllBookMarkResponseDto> showBookMarkList(Long bookId) {
         List<BookMark> bookMarkList = bookMarkRepository.findAllByBookIdOrderByDateAsc(bookId);
@@ -25,5 +30,19 @@ public class BookMarkService {
         return bookMarkRepository.findById(bookMarkId)
                 .map(b -> BookMarkResponseDto.from(b))
                 .get();
+    }
+
+    public void modifyBookMark(long bookMarkId, BookMarkRequestDto request, MultipartFile file) {
+        BookMark bookMark = bookMarkRepository.findById(bookMarkId).get();
+        bookMark.changeBookMarkInfo(request);
+
+        if (file != null) {
+            String originalFilename = file.getOriginalFilename();
+            String extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+            fileRequestService.deleteBookImage(ImageRequestDto.of(request, extension));
+            fileRequestService.sendBookImageReqeust(ImageRequestDto.of(request, extension), file);
+        }
+
+        bookMarkRepository.save(bookMark);
     }
 }

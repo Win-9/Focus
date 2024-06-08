@@ -2,6 +2,7 @@ package org.example.focus.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.example.focus.dto.request.BookMarkRequestDto;
 
 import java.time.LocalDateTime;
 
@@ -21,4 +22,9 @@ public class BookMark {
     @ManyToOne
     @JoinColumn(name = "BOOK_ID")
     private Book book;
+
+    public void changeBookMarkInfo(BookMarkRequestDto request) {
+        this.text = request.getText();
+        this.page = request.getPage();
+    }
 }
