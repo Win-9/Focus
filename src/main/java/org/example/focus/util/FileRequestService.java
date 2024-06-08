@@ -31,4 +31,20 @@ public class FileRequestService {
 
         return response.getBody();
     }
+
+    public String deleteBookImage(ImageRequestDto request) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("request", request);
+
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+        ResponseEntity<String> response = restTemplate.exchange(
+                EncryptUtil.imageDeleteUrl,
+                HttpMethod.DELETE,
+                requestEntity,
+                String.class);
+        return response.getBody();
+    }
 }
