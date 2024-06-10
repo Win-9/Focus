@@ -35,4 +35,10 @@ public class BookMarkController {
         bookMarkService.modifyBookMark(bookMarkId, request, multipartFile);
         return BaseResponse.success();
     }
+
+    @DeleteMapping("/bookmark/{bookMarkId}")
+    public BaseResponse<Object> removeBookMark(@PathVariable long bookMarkId) {
+        bookMarkService.deleteBookMark(bookMarkId);
+        return BaseResponse.success();
+    }
 }

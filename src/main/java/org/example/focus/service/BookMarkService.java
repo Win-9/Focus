@@ -43,9 +43,10 @@ public class BookMarkService {
 
         bookMarkRepository.save(bookMark);
     }
-//
-//    public void deleteBookMark(long bookMarkId) {
-//        BookMark bookMark = bookMarkRepository.findById(bookMarkId).get();
-//        bookMarkRepository.delete(bookMark);
-//    }
+
+    public void deleteBookMark(long bookMarkId) {
+        BookMark bookMark = bookMarkRepository.findById(bookMarkId).get();
+        bookMarkRepository.delete(bookMark);
+        fileRequestService.deleteBookImage(ImageRequestDto.of(bookMark));
+    }
 }
