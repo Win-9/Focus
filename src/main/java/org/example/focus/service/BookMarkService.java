@@ -37,12 +37,15 @@ public class BookMarkService {
         bookMark.changeBookMarkInfo(request);
 
         if (file != null) {
-            String originalFilename = file.getOriginalFilename();
-            String extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
-            fileRequestService.deleteBookImage(ImageRequestDto.of(request, extension));
-            fileRequestService.sendBookImageReqeust(ImageRequestDto.of(request, extension), file);
+            fileRequestService.deleteBookImage(ImageRequestDto.of(bookMark));
+            fileRequestService.sendBookImageReqeust(ImageRequestDto.of(bookMark), file);
         }
 
         bookMarkRepository.save(bookMark);
     }
+//
+//    public void deleteBookMark(long bookMarkId) {
+//        BookMark bookMark = bookMarkRepository.findById(bookMarkId).get();
+//        bookMarkRepository.delete(bookMark);
+//    }
 }

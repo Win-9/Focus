@@ -51,13 +51,14 @@ public class BookService {
         Book book = Book.builder()
                 .title(request.getTitle())
                 .author(request.getAuthor())
+                .extension(extension)
                 .coverImage(EncryptUtil.imageAccessUrl + request.getTitle() + "/" +
                         request.getTitle() + "bookCover." + extension)
                 .modifiedDate(LocalDateTime.now())
                 .registeredDate(LocalDateTime.now())
                 .build();
 
-        fileRequestService.sendBookImageReqeust(ImageRequestDto.of(request, extension),file);
+        fileRequestService.sendBookImageReqeust(ImageRequestDto.of(book), file);
         bookRepository.save(book);
     }
 
