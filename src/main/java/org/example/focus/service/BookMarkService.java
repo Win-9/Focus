@@ -1,7 +1,7 @@
 package org.example.focus.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.focus.dto.request.BookMarkRequestDto;
+import org.example.focus.dto.request.BookMarkModifyRequestdto;
 import org.example.focus.dto.request.ImageRequestDto;
 import org.example.focus.dto.resopnse.AllBookMarkResponseDto;
 import org.example.focus.dto.resopnse.BookMarkResponseDto;
@@ -32,11 +32,14 @@ public class BookMarkService {
                 .get();
     }
 
-    public void modifyBookMark(long bookMarkId, BookMarkRequestDto request, MultipartFile file) {
+    public void modifyBookMark(long bookMarkId, BookMarkModifyRequestdto request, MultipartFile file) {
         BookMark bookMark = bookMarkRepository.findById(bookMarkId).get();
         bookMark.changeBookMarkInfo(request);
 
         if (file != null) {
+            String originName = file.getOriginalFilename();
+            String extension = originName.substring(0, originName.lastIndexOf("."));
+            bookMark.changeExtension(extension);
             fileRequestService.deleteBookImage(ImageRequestDto.of(bookMark));
             fileRequestService.sendBookImageReqeust(ImageRequestDto.of(bookMark), file);
         }
