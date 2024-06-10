@@ -40,9 +40,8 @@ public class FileRequestService {
         body.add("request", request);
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-        ResponseEntity<String> response = restTemplate.exchange(
+        ResponseEntity<String> response = restTemplate.postForEntity(
                 EncryptUtil.imageDeleteUrl,
-                HttpMethod.DELETE,
                 requestEntity,
                 String.class);
         return response.getBody();
