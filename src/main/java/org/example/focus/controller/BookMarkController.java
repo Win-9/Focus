@@ -31,7 +31,7 @@ public class BookMarkController {
 
     @PutMapping("/bookmark/{bookMarkId}")
     public BaseResponse<Object> putBookMark(@PathVariable long bookMarkId, @RequestPart(value = "request") BookMarkRequestDto request,
-                                            @RequestPart(value = "file") MultipartFile multipartFile) {
+                                            @RequestPart(value = "file", required = false) MultipartFile multipartFile) {
         bookMarkService.modifyBookMark(bookMarkId, request, multipartFile);
         return BaseResponse.success();
     }
