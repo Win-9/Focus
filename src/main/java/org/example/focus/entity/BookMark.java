@@ -18,6 +18,7 @@ public class BookMark {
     private int page;
     private String thumbnailImage;
     private String text;
+    private String extension;
 
     @ManyToOne
     @JoinColumn(name = "BOOK_ID")
