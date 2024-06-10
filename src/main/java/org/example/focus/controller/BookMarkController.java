@@ -2,6 +2,7 @@ package org.example.focus.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.focus.common.BaseResponse;
+import org.example.focus.dto.request.BookMarkModifyRequestdto;
 import org.example.focus.dto.request.BookMarkRequestDto;
 import org.example.focus.dto.resopnse.AllBookMarkResponseDto;
 import org.example.focus.dto.resopnse.BookMarkResponseDto;
@@ -17,6 +18,13 @@ import java.util.List;
 public class BookMarkController {
     private final BookMarkService bookMarkService;
 
+    @PostMapping("/bookmark/add")
+    public BaseResponse<Object> addBookMark(@RequestPart(value = "reqeust") BookMarkRequestDto request,
+                                            @RequestPart(value = "file") MultipartFile file) {
+        bookMarkService.processBookMark(request, file);
+        return BaseResponse.success();
+    }
+
     @GetMapping("/bookmark/{bookId}")
     public BaseResponse<List<AllBookMarkResponseDto>> getBookMarkList(@PathVariable Long bookId) {
         List<AllBookMarkResponseDto> response = bookMarkService.showBookMarkList(bookId);
@@ -30,7 +38,7 @@ public class BookMarkController {
     }
 
     @PutMapping("/bookmark/{bookMarkId}")
-    public BaseResponse<Object> putBookMark(@PathVariable long bookMarkId, @RequestPart(value = "request") BookMarkRequestDto request,
+    public BaseResponse<Object> putBookMark(@PathVariable long bookMarkId, @RequestPart(value = "request") BookMarkModifyRequestdto request,
                                             @RequestPart(value = "file", required = false) MultipartFile multipartFile) {
         bookMarkService.modifyBookMark(bookMarkId, request, multipartFile);
         return BaseResponse.success();

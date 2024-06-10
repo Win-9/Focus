@@ -1,13 +1,19 @@
 package org.example.focus.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.example.focus.dto.request.BookMarkModifyRequestdto;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BookMark {
 
     @Id
@@ -31,5 +37,9 @@ public class BookMark {
 
     public void changeExtension(String extension) {
         this.extension = extension;
+    }
+
+    public void changeBook(Book book) {
+        this.book = book;
     }
 }
