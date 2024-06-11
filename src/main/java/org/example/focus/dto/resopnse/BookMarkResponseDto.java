@@ -20,7 +20,7 @@ public class BookMarkResponseDto {
                 .id(bookMark.getId())
                 .thumbnailImage(bookMark.getThumbnailImage())
                 .date(bookMark.getDate())
-                .page(builder().page)
+                .page(bookMark.getPage())
                 .text(bookMark.getText())
                 .build();
     }
