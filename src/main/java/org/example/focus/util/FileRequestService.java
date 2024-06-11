@@ -36,10 +36,8 @@ public class FileRequestService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        body.add("request", request);
 
-        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+        HttpEntity<ImageRequestDto> requestEntity = new HttpEntity<>(request, headers);
         ResponseEntity<String> response = restTemplate.postForEntity(
                 EncryptUtil.imageDeleteUrl,
                 requestEntity,
