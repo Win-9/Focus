@@ -44,7 +44,7 @@ public class BookMarkController {
         return BaseResponse.success();
     }
 
-    @DeleteMapping("/bookmark/{bookMarkId}")
+    @DeleteMapping("/bookmark/removal/{bookMarkId}")
     public BaseResponse<Object> removeBookMark(@PathVariable long bookMarkId) {
         bookMarkService.deleteBookMark(bookMarkId);
         return BaseResponse.success();
