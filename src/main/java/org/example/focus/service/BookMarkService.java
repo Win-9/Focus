@@ -27,7 +27,7 @@ public class BookMarkService {
 
     public void processBookMark(BookMarkRequestDto request, MultipartFile file) {
         String originName = file.getOriginalFilename();
-        String extension = originName.substring(0, originName.lastIndexOf("."));
+        String extension = originName.substring(originName.lastIndexOf(".") + 1);
         Book book = bookRepository.findById(request.getBookId()).get();
 
         BookMark bookMark = BookMark.builder()
