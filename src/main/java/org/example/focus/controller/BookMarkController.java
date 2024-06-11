@@ -25,7 +25,7 @@ public class BookMarkController {
         return BaseResponse.success();
     }
 
-    @GetMapping("/bookmark/{bookId}")
+    @GetMapping("/bookmark/list/{bookId}")
     public BaseResponse<List<AllBookMarkResponseDto>> getBookMarkList(@PathVariable Long bookId) {
         List<AllBookMarkResponseDto> response = bookMarkService.showBookMarkList(bookId);
         return BaseResponse.success(response);
