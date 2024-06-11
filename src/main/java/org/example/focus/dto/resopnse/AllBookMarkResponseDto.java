@@ -19,7 +19,7 @@ public class AllBookMarkResponseDto {
                 .id(bookMark.getId())
                 .thumbnailImage(bookMark.getThumbnailImage())
                 .date(bookMark.getDate())
-                .page(builder().page)
+                .page(bookMark.getPage())
                 .build();
     }
 }
