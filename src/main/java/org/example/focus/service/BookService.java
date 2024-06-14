@@ -7,6 +7,7 @@ import org.example.focus.dto.request.ImageRequestDto;
 import org.example.focus.dto.resopnse.BookListResponseDto;
 import org.example.focus.dto.resopnse.CalendarReadInfoResponseDto;
 import org.example.focus.entity.Book;
+import org.example.focus.repsitory.BookMarkRepository;
 import org.example.focus.repsitory.BookRepository;
 import org.example.focus.util.EncryptUtil;
 import org.example.focus.util.FileRequestService;
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @Service
@@ -24,6 +26,7 @@ import java.util.stream.Collectors;
 public class BookService {
     private final BookRepository bookRepository;
     private final FileRequestService fileRequestService;
+    private final BookMarkRepository bookMarkRepository;
 
     public BaseResponse<CalendarReadInfoResponseDto> showCalendarData(int year, int month) {
         LocalDateTime startDate = LocalDateTime.of(year, month, 1, 0, 0, 0);
@@ -32,11 +35,21 @@ public class BookService {
                 .withMinute(59)
                 .withSecond(59);
 
-        // 책을 읽은 날짜 추축
-        List<LocalDate> readDateList = bookRepository.findByRegisteredDateBetween(startDate, endDate)
+        // 책 수정 날짜 추출
+        List<LocalDate> bookReadDateList = bookRepository.findAllByModifiedDateBetween(startDate, endDate)
                 .stream().map(a -> a.getRegisteredDate().toLocalDate())
+                .collect(Collectors.toList());
+
+        // 북마크 수정 날짜 추출
+        List<LocalDate> bookMarkReadDateList = bookMarkRepository.findAllByModifiedDateBetween(startDate, endDate)
+                .stream().map(a -> a.getModifiedDate().toLocalDate())
+                .collect(Collectors.toList());
+
+        List<LocalDate> readDateList = Stream.of(bookReadDateList, bookMarkReadDateList)
+                .flatMap(x -> x.stream())
                 .distinct()
                 .collect(Collectors.toList());
+
         return BaseResponse.success(CalendarReadInfoResponseDto.of(readDateList, year, month));
     }
 
@@ -51,13 +64,14 @@ public class BookService {
         Book book = Book.builder()
                 .title(request.getTitle())
                 .author(request.getAuthor())
+                .extension(extension)
                 .coverImage(EncryptUtil.imageAccessUrl + request.getTitle() + "/" +
                         request.getTitle() + "bookCover." + extension)
                 .modifiedDate(LocalDateTime.now())
                 .registeredDate(LocalDateTime.now())
                 .build();
 
-        fileRequestService.sendBookCoverImageReqeust(ImageRequestDto.of(request, extension),file);
+        fileRequestService.sendBookImageReqeust(ImageRequestDto.of(book), file);
         bookRepository.save(book);
     }
 

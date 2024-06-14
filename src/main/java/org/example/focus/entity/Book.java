@@ -24,4 +24,5 @@ public class Book {
     private String coverImage;
     private LocalDateTime registeredDate;
     private LocalDateTime modifiedDate;
+    private String extension;
 }

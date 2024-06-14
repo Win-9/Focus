@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileRequestService {
 
     private final RestTemplate restTemplate = new RestTemplate();
-    public String sendBookCoverImageReqeust(ImageRequestDto request, MultipartFile file) {
+    public String sendBookImageReqeust(ImageRequestDto request, MultipartFile file) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
@@ -29,6 +29,19 @@ public class FileRequestService {
                 requestEntity,
                 String.class);
 
+        return response.getBody();
+    }
+
+    public String deleteBookImage(ImageRequestDto request) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+
+        HttpEntity<ImageRequestDto> requestEntity = new HttpEntity<>(request, headers);
+        ResponseEntity<String> response = restTemplate.postForEntity(
+                EncryptUtil.imageDeleteUrl,
+                requestEntity,
+                String.class);
         return response.getBody();
     }
 }
