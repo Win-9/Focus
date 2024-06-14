@@ -18,7 +18,7 @@ public class BookListResponseDto {
 
     public static BookListResponseDto from(Book book) {
         return BookListResponseDto.builder()
-                .author(book.getTitle())
+                .title(book.getTitle())
                 .author(book.getAuthor())
                 .coverImage(book.getCoverImage())
                 .bookId(builder().bookId)
