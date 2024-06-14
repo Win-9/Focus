@@ -37,6 +37,9 @@ public class BookService {
                 .stream().map(a -> a.getRegisteredDate().toLocalDate())
                 .distinct()
                 .collect(Collectors.toList());
+        for (LocalDate localDate : readDateList) {
+            System.out.println("localDate = " + localDate);
+        }
         return BaseResponse.success(CalendarReadInfoResponseDto.of(readDateList, year, month));
     }
 

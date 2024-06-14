@@ -25,6 +25,7 @@ public class BookMark {
     private String thumbnailImage;
     private String text;
     private String extension;
+    private LocalDateTime modifiedDate;
 
     @ManyToOne
     @JoinColumn(name = "BOOK_ID")
@@ -41,5 +42,9 @@ public class BookMark {
 
     public void changeBook(Book book) {
         this.book = book;
+    }
+
+    public void changeModifiedDate(LocalDateTime now) {
+        this.modifiedDate = now;
     }
 }

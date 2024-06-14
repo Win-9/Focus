@@ -36,6 +36,7 @@ public class BookMarkService {
                 .text(request.getText())
                 .thumbnailImage(EncryptUtil.imageAccessUrl + request.getTitle() + "/" +
                         request.getTitle() + "thumbnail" + request.getPage() + "." + extension)
+                .modifiedDate(LocalDateTime.now())
                 .extension(extension)
                 .build();
         bookMark.changeBook(book);
@@ -60,6 +61,7 @@ public class BookMarkService {
     public void modifyBookMark(long bookMarkId, BookMarkModifyRequestdto request, MultipartFile file) {
         BookMark bookMark = bookMarkRepository.findById(bookMarkId).get();
         bookMark.changeBookMarkInfo(request);
+        bookMark.changeModifiedDate(LocalDateTime.now());
 
         if (file != null) {
             String originName = file.getOriginalFilename();
