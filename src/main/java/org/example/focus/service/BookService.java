@@ -7,6 +7,8 @@ import org.example.focus.dto.request.ImageRequestDto;
 import org.example.focus.dto.resopnse.BookListResponseDto;
 import org.example.focus.dto.resopnse.CalendarReadInfoResponseDto;
 import org.example.focus.entity.Book;
+import org.example.focus.exception.ErrorCode;
+import org.example.focus.exception.exist.BookExistException;
 import org.example.focus.repsitory.BookMarkRepository;
 import org.example.focus.repsitory.BookRepository;
 import org.example.focus.util.EncryptUtil;
@@ -54,6 +56,11 @@ public class BookService {
     }
 
     public void processBook(BookCoverRequestDto request, MultipartFile file) {
+        boolean isBookExist = bookRepository.existsByTitle(request.getTitle());
+        if (isBookExist) {
+            throw new BookExistException(ErrorCode.EXIST_BOOK);
+        }
+
         String originalFilename = file.getOriginalFilename();
         String extension = "";
 
