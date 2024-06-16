@@ -8,6 +8,8 @@ import org.example.focus.dto.resopnse.AllBookMarkResponseDto;
 import org.example.focus.dto.resopnse.BookMarkResponseDto;
 import org.example.focus.entity.Book;
 import org.example.focus.entity.BookMark;
+import org.example.focus.exception.ErrorCode;
+import org.example.focus.exception.notFound.FileBoundException;
 import org.example.focus.repsitory.BookMarkRepository;
 import org.example.focus.repsitory.BookRepository;
 import org.example.focus.util.EncryptUtil;
@@ -27,6 +29,11 @@ public class BookMarkService {
 
     public void processBookMark(BookMarkRequestDto request, MultipartFile file) {
         String originName = file.getOriginalFilename();
+
+        if (originName.lastIndexOf(".") == -1) {
+            throw new FileBoundException(ErrorCode.EXTENSION_NOT_FOUND);
+        }
+
         String extension = originName.substring(originName.lastIndexOf(".") + 1);
         Book book = bookRepository.findById(request.getBookId()).get();
 
