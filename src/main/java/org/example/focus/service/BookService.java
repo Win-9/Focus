@@ -9,6 +9,7 @@ import org.example.focus.dto.resopnse.CalendarReadInfoResponseDto;
 import org.example.focus.entity.Book;
 import org.example.focus.exception.ErrorCode;
 import org.example.focus.exception.exist.BookExistException;
+import org.example.focus.exception.notFound.FileBoundException;
 import org.example.focus.repsitory.BookMarkRepository;
 import org.example.focus.repsitory.BookRepository;
 import org.example.focus.util.EncryptUtil;
@@ -62,8 +63,11 @@ public class BookService {
         }
 
         String originalFilename = file.getOriginalFilename();
-        String extension = "";
+        if (originalFilename.lastIndexOf(".") == -1) {
+            throw new FileBoundException(ErrorCode.EXTENSION_NOT_FOUND);
+        }
 
+        String extension = "";
         if (originalFilename != null && originalFilename.contains(".")) {
             extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
         }
