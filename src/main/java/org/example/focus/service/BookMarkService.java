@@ -72,13 +72,13 @@ public class BookMarkService {
         List<BookMark> bookMarkList = bookMarkRepository.findAllByBookIdOrderByModifiedDateAsc(bookId);
 
         return bookMarkList.stream()
-                .map(b -> AllBookMarkResponseDto.from(b))
+                .map(AllBookMarkResponseDto::from)
                 .toList();
     }
 
     public BookMarkResponseDto showBookMark(Long bookMarkId) {
         return bookMarkRepository.findById(bookMarkId)
-                .map(b -> BookMarkResponseDto.from(b))
+                .map(BookMarkResponseDto::from)
                 .orElseThrow(() -> new BookMarkNotExistException(ErrorCode.BOOKMAKR_NOT_EXIST));
     }
 

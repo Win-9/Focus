@@ -7,6 +7,7 @@ import org.example.focus.dto.resopnse.BookListResponseDto;
 import org.example.focus.dto.resopnse.BookResponseDto;
 import org.example.focus.dto.resopnse.CalendarReadInfoResponseDto;
 import org.example.focus.entity.Book;
+import org.example.focus.entity.BookMark;
 import org.example.focus.exception.ErrorCode;
 import org.example.focus.exception.exist.BookExistException;
 import org.example.focus.exception.notFound.FileBoundException;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -41,16 +43,16 @@ public class BookService {
 
         // 책 수정 날짜 추출
         List<LocalDate> bookReadDateList = bookRepository.findAllByModifiedDateBetween(startDate, endDate)
-                .stream().map(a -> a.getRegisteredDate())
+                .stream().map(Book::getRegisteredDate)
                 .collect(Collectors.toList());
 
         // 북마크 수정 날짜 추출
         List<LocalDate> bookMarkReadDateList = bookMarkRepository.findAllByModifiedDateBetween(startDate, endDate)
-                .stream().map(a -> a.getModifiedDate())
+                .stream().map(BookMark::getModifiedDate)
                 .collect(Collectors.toList());
 
         List<LocalDate> readDateList = Stream.of(bookReadDateList, bookMarkReadDateList)
-                .flatMap(x -> x.stream())
+                .flatMap(Collection::stream)
                 .distinct()
                 .collect(Collectors.toList());
 
@@ -91,7 +93,7 @@ public class BookService {
     public List<BookListResponseDto> showBookList() {
         List<Book> bookList = bookRepository.findAllByOrderByModifiedDateDesc();
         return bookList.stream()
-                .map(b -> BookListResponseDto.from(b))
+                .map(BookListResponseDto::from)
                 .toList();
     }
 
