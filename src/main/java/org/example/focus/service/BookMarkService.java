@@ -1,6 +1,7 @@
 package org.example.focus.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.focus.common.BaseResponse;
 import org.example.focus.dto.request.BookMarkModifyRequestdto;
 import org.example.focus.dto.request.BookMarkRequestDto;
 import org.example.focus.dto.request.ImageRequestDto;
@@ -29,7 +30,7 @@ public class BookMarkService {
     private final BookRepository bookRepository;
     private final FileRequestService fileRequestService;
 
-    public void processBookMark(BookMarkRequestDto request, MultipartFile file) {
+    public BaseResponse<BookMarkResponseDto> processBookMark(BookMarkRequestDto request, MultipartFile file) {
         boolean isBookExist = bookRepository.existsByTitle(request.getTitle());
         if (!isBookExist) {
             throw new BookNotExistException(ErrorCode.BOOK_NOT_EXIST);
@@ -58,6 +59,7 @@ public class BookMarkService {
 
         fileRequestService.sendBookImageReqeust(ImageRequestDto.of(bookMark), file);
         bookMarkRepository.save(bookMark);
+        return BaseResponse.success(BookMarkResponseDto.from(bookMark));
     }
 
     public List<AllBookMarkResponseDto> showBookMarkList(Long bookId) {

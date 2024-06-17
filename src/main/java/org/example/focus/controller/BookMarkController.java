@@ -19,10 +19,9 @@ public class BookMarkController {
     private final BookMarkService bookMarkService;
 
     @PostMapping("/bookmark/add")
-    public BaseResponse<Object> addBookMark(@RequestPart(value = "request") BookMarkRequestDto request,
-                                            @RequestPart(value = "file") MultipartFile file) {
-        bookMarkService.processBookMark(request, file);
-        return BaseResponse.success();
+    public BaseResponse<BookMarkResponseDto> addBookMark(@RequestPart(value = "request") BookMarkRequestDto request,
+                                                         @RequestPart(value = "file") MultipartFile file) {
+        return bookMarkService.processBookMark(request, file);
     }
 
     @GetMapping("/bookmark/list/{bookId}")
