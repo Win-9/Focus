@@ -1,8 +1,10 @@
 package org.example.focus.dto.resopnse;
 
 import lombok.Builder;
+import lombok.Getter;
 import org.example.focus.entity.Book;
 
+@Getter
 @Builder
 public class BookResponseDto {
     private Long id;
