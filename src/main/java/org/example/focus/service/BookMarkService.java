@@ -81,7 +81,7 @@ public class BookMarkService {
                 .orElseThrow(() -> new BookMarkNotExistException(ErrorCode.BOOKMAKR_NOT_EXIST));
     }
 
-    public void modifyBookMark(long bookMarkId, BookMarkModifyRequestdto request, MultipartFile file) {
+    public BaseResponse<BookMarkResponseDto> modifyBookMark(long bookMarkId, BookMarkModifyRequestdto request, MultipartFile file) {
         BookMark bookMark = bookMarkRepository.findById(bookMarkId)
                 .orElseThrow(() -> new BookMarkNotExistException(ErrorCode.BOOKMAKR_NOT_EXIST));
 
@@ -104,6 +104,7 @@ public class BookMarkService {
         }
 
         bookMarkRepository.save(bookMark);
+        return BaseResponse.success(BookMarkResponseDto.from(bookMark));
     }
 
     public void deleteBookMark(long bookMarkId) {
