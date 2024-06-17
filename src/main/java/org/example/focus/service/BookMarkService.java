@@ -8,6 +8,10 @@ import org.example.focus.dto.resopnse.AllBookMarkResponseDto;
 import org.example.focus.dto.resopnse.BookMarkResponseDto;
 import org.example.focus.entity.Book;
 import org.example.focus.entity.BookMark;
+import org.example.focus.exception.ErrorCode;
+import org.example.focus.exception.notFound.FileBoundException;
+import org.example.focus.exception.notexist.BookMarkNotExistException;
+import org.example.focus.exception.notexist.BookNotExistException;
 import org.example.focus.repsitory.BookMarkRepository;
 import org.example.focus.repsitory.BookRepository;
 import org.example.focus.util.EncryptUtil;
@@ -26,9 +30,20 @@ public class BookMarkService {
     private final FileRequestService fileRequestService;
 
     public void processBookMark(BookMarkRequestDto request, MultipartFile file) {
+        boolean isBookExist = bookRepository.existsByTitle(request.getTitle());
+        if (!isBookExist) {
+            throw new BookNotExistException(ErrorCode.BOOK_NOT_EXIST);
+        }
+
         String originName = file.getOriginalFilename();
+
+        if (originName == null || originName.lastIndexOf(".") == -1) {
+            throw new FileBoundException(ErrorCode.EXTENSION_NOT_FOUND);
+        }
+
         String extension = originName.substring(originName.lastIndexOf(".") + 1);
-        Book book = bookRepository.findById(request.getBookId()).get();
+        Book book = bookRepository.findById(request.getBookId())
+                .orElseThrow(() -> new BookNotExistException(ErrorCode.BOOK_NOT_EXIST));
 
         BookMark bookMark = BookMark.builder()
                 .date(LocalDateTime.now())
@@ -46,7 +61,13 @@ public class BookMarkService {
     }
 
     public List<AllBookMarkResponseDto> showBookMarkList(Long bookId) {
+        boolean isBookExist = bookRepository.existsById(bookId);
+        if (!isBookExist) {
+            throw new BookNotExistException(ErrorCode.BOOK_NOT_EXIST);
+        }
+
         List<BookMark> bookMarkList = bookMarkRepository.findAllByBookIdOrderByDateAsc(bookId);
+
         return bookMarkList.stream()
                 .map(b -> AllBookMarkResponseDto.from(b))
                 .toList();
@@ -55,18 +76,27 @@ public class BookMarkService {
     public BookMarkResponseDto showBookMark(Long bookMarkId) {
         return bookMarkRepository.findById(bookMarkId)
                 .map(b -> BookMarkResponseDto.from(b))
-                .get();
+                .orElseThrow(() -> new BookMarkNotExistException(ErrorCode.BOOKMAKR_NOT_EXIST));
     }
 
     public void modifyBookMark(long bookMarkId, BookMarkModifyRequestdto request, MultipartFile file) {
-        BookMark bookMark = bookMarkRepository.findById(bookMarkId).get();
+        BookMark bookMark = bookMarkRepository.findById(bookMarkId)
+                .orElseThrow(() -> new BookMarkNotExistException(ErrorCode.BOOKMAKR_NOT_EXIST));
+
         bookMark.changeBookMarkInfo(request);
         bookMark.changeModifiedDate(LocalDateTime.now());
 
         if (file != null) {
             String originName = file.getOriginalFilename();
+            if (originName == null || originName.lastIndexOf(".") == -1) {
+                throw new FileBoundException(ErrorCode.EXTENSION_NOT_FOUND);
+            }
+
             String extension = originName.substring(0, originName.lastIndexOf("."));
             bookMark.changeExtension(extension);
+            bookMark.changeThubnail(EncryptUtil.imageAccessUrl + request.getTitle() + "/" +
+                    request.getTitle() + "thumbnail" + request.getPage() + "." + extension);
+
             fileRequestService.deleteBookImage(ImageRequestDto.of(bookMark));
             fileRequestService.sendBookImageReqeust(ImageRequestDto.of(bookMark), file);
         }
@@ -75,7 +105,8 @@ public class BookMarkService {
     }
 
     public void deleteBookMark(long bookMarkId) {
-        BookMark bookMark = bookMarkRepository.findById(bookMarkId).get();
+        BookMark bookMark = bookMarkRepository.findById(bookMarkId)
+                .orElseThrow(() -> new BookMarkNotExistException(ErrorCode.BOOKMAKR_NOT_EXIST));
         bookMarkRepository.delete(bookMark);
         fileRequestService.deleteBookImage(ImageRequestDto.of(bookMark));
     }

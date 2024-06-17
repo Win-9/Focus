@@ -10,4 +10,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findAllByModifiedDateBetween(LocalDateTime startDate, LocalDateTime endDate);
 
     List<Book> findAllByOrderByModifiedDateDesc();
+
+    boolean existsByTitle(String title);
 }
