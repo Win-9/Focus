@@ -1,7 +1,6 @@
 package org.example.focus.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.focus.common.BaseResponse;
 import org.example.focus.dto.request.BookMarkModifyRequestdto;
 import org.example.focus.dto.request.BookMarkRequestDto;
 import org.example.focus.dto.request.ImageRequestDto;
@@ -31,7 +30,7 @@ public class BookMarkService {
     private final BookRepository bookRepository;
     private final FileRequestService fileRequestService;
 
-    public BaseResponse<BookMarkResponseDto> processBookMark(BookMarkRequestDto request, MultipartFile file) {
+    public BookMarkResponseDto processBookMark(BookMarkRequestDto request, MultipartFile file) {
         boolean isBookExist = bookRepository.existsByTitle(request.getTitle());
         if (!isBookExist) {
             throw new BookNotExistException(ErrorCode.BOOK_NOT_EXIST);
@@ -60,7 +59,7 @@ public class BookMarkService {
 
         fileRequestService.sendBookImageReqeust(ImageRequestDto.of(bookMark), file);
         bookMarkRepository.save(bookMark);
-        return BaseResponse.success(BookMarkResponseDto.from(bookMark));
+        return BookMarkResponseDto.from(bookMark);
     }
 
     public List<AllBookMarkResponseDto> showBookMarkList(Long bookId) {
@@ -82,7 +81,7 @@ public class BookMarkService {
                 .orElseThrow(() -> new BookMarkNotExistException(ErrorCode.BOOKMAKR_NOT_EXIST));
     }
 
-    public BaseResponse<BookMarkResponseDto> modifyBookMark(long bookMarkId, BookMarkModifyRequestdto request, MultipartFile file) {
+    public BookMarkResponseDto modifyBookMark(long bookMarkId, BookMarkModifyRequestdto request, MultipartFile file) {
         BookMark bookMark = bookMarkRepository.findById(bookMarkId)
                 .orElseThrow(() -> new BookMarkNotExistException(ErrorCode.BOOKMAKR_NOT_EXIST));
 
@@ -105,7 +104,7 @@ public class BookMarkService {
         }
 
         bookMarkRepository.save(bookMark);
-        return BaseResponse.success(BookMarkResponseDto.from(bookMark));
+        return BookMarkResponseDto.from(bookMark);
     }
 
     public void deleteBookMark(long bookMarkId) {

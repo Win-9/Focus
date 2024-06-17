@@ -1,7 +1,6 @@
 package org.example.focus.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.focus.common.BaseResponse;
 import org.example.focus.dto.request.BookCoverRequestDto;
 import org.example.focus.dto.request.ImageRequestDto;
 import org.example.focus.dto.resopnse.BookListResponseDto;
@@ -33,7 +32,7 @@ public class BookService {
     private final FileRequestService fileRequestService;
     private final BookMarkRepository bookMarkRepository;
 
-    public BaseResponse<CalendarReadInfoResponseDto> showCalendarData(int year, int month) {
+    public CalendarReadInfoResponseDto showCalendarData(int year, int month) {
         LocalDateTime startDate = LocalDateTime.of(year, month, 1, 0, 0, 0);
         LocalDateTime endDate = startDate.withDayOfMonth(startDate.toLocalDate().lengthOfMonth())
                 .withHour(23)
@@ -55,10 +54,10 @@ public class BookService {
                 .distinct()
                 .collect(Collectors.toList());
 
-        return BaseResponse.success(CalendarReadInfoResponseDto.of(readDateList, year, month));
+        return CalendarReadInfoResponseDto.of(readDateList, year, month);
     }
 
-    public BaseResponse<BookResponseDto> processBook(BookCoverRequestDto request, MultipartFile file) {
+    public BookResponseDto processBook(BookCoverRequestDto request, MultipartFile file) {
         boolean isBookExist = bookRepository.existsByTitle(request.getTitle());
         if (!isBookExist) {
             throw new BookExistException(ErrorCode.EXIST_BOOK);
@@ -86,18 +85,17 @@ public class BookService {
 
         fileRequestService.sendBookImageReqeust(ImageRequestDto.of(book), file);
         bookRepository.save(book);
-        return BaseResponse.success(BookResponseDto.from(book));
+        return BookResponseDto.from(book);
     }
 
-    public BaseResponse<List<BookListResponseDto>> showBookList() {
+    public List<BookListResponseDto> showBookList() {
         List<Book> bookList = bookRepository.findAllByOrderByModifiedDateDesc();
-        return BaseResponse.success(
-                bookList.stream()
-                        .map(b -> BookListResponseDto.from(b))
-                        .toList());
+        return bookList.stream()
+                .map(b -> BookListResponseDto.from(b))
+                .toList();
     }
 
-    public BaseResponse<BookResponseDto> modifyBook(long bookId, BookCoverRequestDto request, MultipartFile file) {
+    public BookResponseDto modifyBook(long bookId, BookCoverRequestDto request, MultipartFile file) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new BookNotExistException(ErrorCode.BOOK_NOT_EXIST));
         book.changeBookInformation(request);
@@ -116,7 +114,7 @@ public class BookService {
             fileRequestService.deleteBookImage(ImageRequestDto.of(book));
             fileRequestService.sendBookImageReqeust(ImageRequestDto.of(book), file);
         }
-        return BaseResponse.success(BookResponseDto.from(book));
+        return BookResponseDto.from(book);
     }
 
     public void removeBook(long bookId) {

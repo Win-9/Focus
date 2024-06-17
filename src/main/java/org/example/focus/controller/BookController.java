@@ -20,20 +20,23 @@ public class BookController {
 
     @GetMapping("/calendar/{year}/{month}")
     public BaseResponse<CalendarReadInfoResponseDto> getCalendar(@PathVariable int year, @PathVariable int month) {
-        return bookService.showCalendarData(year, month);
+        CalendarReadInfoResponseDto response = bookService.showCalendarData(year, month);
+        return BaseResponse.success(response);
     }
 
     @PostMapping("/book")
     public BaseResponse<BookResponseDto> addBook(@RequestPart(value = "request") BookCoverRequestDto bookCoverRequestDto,
-                                                 @RequestPart(value = "file") MultipartFile multipartFile) {
-        return bookService.processBook(bookCoverRequestDto, multipartFile);
+                                                 @RequestPart MultipartFile file) {
+        BookResponseDto response = bookService.processBook(bookCoverRequestDto, file);
+        return BaseResponse.success(response);
     }
 
     @PutMapping("/book/{bookId}")
     public BaseResponse<BookResponseDto> putBook(@PathVariable long bookId,
                                                  @RequestPart(value = "request") BookCoverRequestDto requestDto,
-                                                 @RequestPart(value = "file", required = false) MultipartFile file) {
-        return bookService.modifyBook(bookId, requestDto, file);
+                                                 @RequestPart(required = false) MultipartFile file) {
+        BookResponseDto response = bookService.modifyBook(bookId, requestDto, file);
+        return BaseResponse.success(response);
     }
 
     @DeleteMapping("/book/{bookId}")
@@ -44,6 +47,7 @@ public class BookController {
 
     @GetMapping("/book/list")
     public BaseResponse<List<BookListResponseDto>> getBookList() {
-        return bookService.showBookList();
+        List<BookListResponseDto> response = bookService.showBookList();
+        return BaseResponse.success(response);
     }
 }
