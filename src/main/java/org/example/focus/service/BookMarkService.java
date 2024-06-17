@@ -94,6 +94,9 @@ public class BookMarkService {
 
             String extension = originName.substring(0, originName.lastIndexOf("."));
             bookMark.changeExtension(extension);
+            bookMark.changeThubnail(EncryptUtil.imageAccessUrl + request.getTitle() + "/" +
+                    request.getTitle() + "thumbnail" + request.getPage() + "." + extension);
+
             fileRequestService.deleteBookImage(ImageRequestDto.of(bookMark));
             fileRequestService.sendBookImageReqeust(ImageRequestDto.of(bookMark), file);
         }

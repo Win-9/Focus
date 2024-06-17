@@ -47,4 +47,8 @@ public class BookMark {
     public void changeModifiedDate(LocalDateTime now) {
         this.modifiedDate = now;
     }
+
+    public void changeThubnail(String thumbnail) {
+        this.thumbnailImage = thumbnail;
+    }
 }
