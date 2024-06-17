@@ -18,7 +18,7 @@ public class AllBookMarkResponseDto {
         return AllBookMarkResponseDto.builder()
                 .id(bookMark.getId())
                 .thumbnailImage(bookMark.getThumbnailImage())
-                .date(bookMark.getDate())
+                .date(bookMark.getModifiedDate())
                 .page(bookMark.getPage())
                 .build();
     }
