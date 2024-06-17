@@ -120,6 +120,7 @@ public class BookMarkService {
                 .map(AllBookMarkResponseDto::from)
                 .toList();
 
-        return list.stream().collect(Collectors.groupingBy(AllBookMarkResponseDto::getDate));
+        return list.stream()
+                .collect(Collectors.groupingBy(AllBookMarkResponseDto::getDate));
     }
 }
