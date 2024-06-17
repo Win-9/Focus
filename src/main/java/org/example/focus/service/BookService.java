@@ -117,4 +117,10 @@ public class BookService {
         }
         return BaseResponse.success(BookResponseDto.from(book));
     }
+
+    public void removeBook(long bookId) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new BookNotExistException(ErrorCode.BOOK_NOT_EXIST));
+        bookRepository.delete(book);
+    }
 }

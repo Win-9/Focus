@@ -37,6 +37,12 @@ public class BookController {
         return bookService.modifyBook(bookId, requestDto, file);
     }
 
+    @DeleteMapping("/book/{bookId}")
+    public BaseResponse<Object> deleteBook(@PathVariable long bookId) {
+        bookService.removeBook(bookId);
+        return BaseResponse.success();
+    }
+
     @GetMapping("/book/list")
     public BaseResponse<List<BookListResponseDto>> getBookList() {
         return bookService.showBookList();
