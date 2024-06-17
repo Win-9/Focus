@@ -10,7 +10,9 @@ import org.example.focus.service.BookMarkService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -29,6 +31,12 @@ public class BookMarkController {
     public BaseResponse<List<AllBookMarkResponseDto>> getBookMarkList(@PathVariable Long bookId) {
         List<AllBookMarkResponseDto> response = bookMarkService.showBookMarkList(bookId);
         return BaseResponse.success(response);
+    }
+
+    @GetMapping("/bookmark/list")
+    public BaseResponse<Map<LocalDate, List<AllBookMarkResponseDto>>> getAllBookMarkList() {
+        Map<LocalDate, List<AllBookMarkResponseDto>> map = bookMarkService.showAllBookMarkList();
+        return BaseResponse.success(map);
     }
 
     @GetMapping("/bookmark/{bookMarkId}")

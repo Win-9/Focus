@@ -21,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -67,7 +69,7 @@ public class BookMarkService {
             throw new BookNotExistException(ErrorCode.BOOK_NOT_EXIST);
         }
 
-        List<BookMark> bookMarkList = bookMarkRepository.findAllByBookIdOrderByDateAsc(bookId);
+        List<BookMark> bookMarkList = bookMarkRepository.findAllByBookIdOrderByModifiedDateAsc(bookId);
 
         return bookMarkList.stream()
                 .map(b -> AllBookMarkResponseDto.from(b))
@@ -113,11 +115,11 @@ public class BookMarkService {
         fileRequestService.deleteBookImage(ImageRequestDto.of(bookMark));
     }
 
-//    public void showAllBookMarkList() {
-//        List<AllBookMarkResponseDto> list = bookMarkRepository.findAll().stream()
-//                .map(AllBookMarkResponseDto::from)
-//                .toList();
-//
-//        return list.stream().collect(Collectors.groupingBy());
-//    }
+    public Map<LocalDate, List<AllBookMarkResponseDto>> showAllBookMarkList() {
+        List<AllBookMarkResponseDto> list = bookMarkRepository.findAll().stream()
+                .map(AllBookMarkResponseDto::from)
+                .toList();
+
+        return list.stream().collect(Collectors.groupingBy(AllBookMarkResponseDto::getDate));
+    }
 }
