@@ -11,6 +11,7 @@ import org.example.focus.entity.Book;
 @AllArgsConstructor
 @Getter
 public class BookListResponseDto {
+    private Long id;
     private String title;
     private String author;
     private String coverImage;
