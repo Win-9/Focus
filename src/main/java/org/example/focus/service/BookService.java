@@ -106,7 +106,7 @@ public class BookService {
                 throw new FileBoundException(ErrorCode.EXTENSION_NOT_FOUND);
             }
 
-            String extension = originName.substring(0, originName.lastIndexOf("."));
+            String extension = originName.substring(originName.lastIndexOf(".") + 1);
             book.changeExtension(extension);
             book.changeCoverImage(EncryptUtil.imageAccessUrl + request.getTitle() + "/" +
                     request.getTitle() + "bookCover." + extension);
