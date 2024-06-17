@@ -31,7 +31,7 @@ public class BookController {
         return BaseResponse.success(response);
     }
 
-    @PutMapping("/book/{bookId}")
+    @PutMapping("/book/modification/{bookId}")
     public BaseResponse<BookResponseDto> putBook(@PathVariable long bookId,
                                                  @RequestPart(value = "request") BookCoverRequestDto requestDto,
                                                  @RequestPart(required = false) MultipartFile file) {
@@ -39,7 +39,7 @@ public class BookController {
         return BaseResponse.success(response);
     }
 
-    @DeleteMapping("/book/{bookId}")
+    @DeleteMapping("/book/removal/{bookId}")
     public BaseResponse<Object> deleteBook(@PathVariable long bookId) {
         bookService.removeBook(bookId);
         return BaseResponse.success();
