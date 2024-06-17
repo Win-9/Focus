@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -47,7 +46,7 @@ public class BookMarkService {
                 .orElseThrow(() -> new BookNotExistException(ErrorCode.BOOK_NOT_EXIST));
 
         BookMark bookMark = BookMark.builder()
-                .date(LocalDateTime.now())
+                .date(LocalDate.now())
                 .page(request.getPage())
                 .text(request.getText())
                 .thumbnailImage(EncryptUtil.imageAccessUrl + request.getTitle() + "/" +
@@ -114,4 +113,11 @@ public class BookMarkService {
         fileRequestService.deleteBookImage(ImageRequestDto.of(bookMark));
     }
 
+//    public void showAllBookMarkList() {
+//        List<AllBookMarkResponseDto> list = bookMarkRepository.findAll().stream()
+//                .map(AllBookMarkResponseDto::from)
+//                .toList();
+//
+//        return list.stream().collect(Collectors.groupingBy());
+//    }
 }

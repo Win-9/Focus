@@ -21,7 +21,7 @@ public class BookMark {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private LocalDateTime date;
+    private LocalDate date;
     private int page;
     private String thumbnailImage;
     private String text;
