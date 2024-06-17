@@ -20,6 +20,7 @@ import org.example.focus.util.FileRequestService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class BookMarkService {
                 .text(request.getText())
                 .thumbnailImage(EncryptUtil.imageAccessUrl + request.getTitle() + "/" +
                         request.getTitle() + "thumbnail" + request.getPage() + "." + extension)
-                .modifiedDate(LocalDateTime.now())
+                .modifiedDate(LocalDate.now())
                 .extension(extension)
                 .build();
         bookMark.changeBook(book);
@@ -86,7 +87,7 @@ public class BookMarkService {
                 .orElseThrow(() -> new BookMarkNotExistException(ErrorCode.BOOKMAKR_NOT_EXIST));
 
         bookMark.changeBookMarkInfo(request);
-        bookMark.changeModifiedDate(LocalDateTime.now());
+        bookMark.changeModifiedDate(LocalDate.now());
 
         if (file != null) {
             String originName = file.getOriginalFilename();

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.focus.dto.request.BookMarkModifyRequestdto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -25,7 +26,7 @@ public class BookMark {
     private String thumbnailImage;
     private String text;
     private String extension;
-    private LocalDateTime modifiedDate;
+    private LocalDate modifiedDate;
 
     @ManyToOne
     @JoinColumn(name = "BOOK_ID")
@@ -44,7 +45,7 @@ public class BookMark {
         this.book = book;
     }
 
-    public void changeModifiedDate(LocalDateTime now) {
+    public void changeModifiedDate(LocalDate now) {
         this.modifiedDate = now;
     }
 

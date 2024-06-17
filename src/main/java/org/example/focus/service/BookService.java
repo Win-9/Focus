@@ -42,12 +42,12 @@ public class BookService {
 
         // 책 수정 날짜 추출
         List<LocalDate> bookReadDateList = bookRepository.findAllByModifiedDateBetween(startDate, endDate)
-                .stream().map(a -> a.getRegisteredDate().toLocalDate())
+                .stream().map(a -> a.getRegisteredDate())
                 .collect(Collectors.toList());
 
         // 북마크 수정 날짜 추출
         List<LocalDate> bookMarkReadDateList = bookMarkRepository.findAllByModifiedDateBetween(startDate, endDate)
-                .stream().map(a -> a.getModifiedDate().toLocalDate())
+                .stream().map(a -> a.getModifiedDate())
                 .collect(Collectors.toList());
 
         List<LocalDate> readDateList = Stream.of(bookReadDateList, bookMarkReadDateList)
@@ -80,8 +80,8 @@ public class BookService {
                 .extension(extension)
                 .coverImage(EncryptUtil.imageAccessUrl + request.getTitle() + "/" +
                         request.getTitle() + "bookCover." + extension)
-                .modifiedDate(LocalDateTime.now())
-                .registeredDate(LocalDateTime.now())
+                .modifiedDate(LocalDate.now())
+                .registeredDate(LocalDate.now())
                 .build();
 
         fileRequestService.sendBookImageReqeust(ImageRequestDto.of(book), file);

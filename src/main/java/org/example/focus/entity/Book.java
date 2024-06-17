@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.focus.dto.request.BookCoverRequestDto;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,14 +24,14 @@ public class Book {
     private String title;
     private String author;
     private String coverImage;
-    private LocalDateTime registeredDate;
-    private LocalDateTime modifiedDate;
+    private LocalDate registeredDate;
+    private LocalDate modifiedDate;
     private String extension;
 
     public void changeBookInformation(BookCoverRequestDto requset) {
         this.title = requset.getTitle();
         this.author = requset.getAuthor();
-        modifiedDate = LocalDateTime.now();
+        modifiedDate = LocalDate.now();
     }
 
     public void changeExtension(String extension) {
