@@ -58,12 +58,12 @@ public class BookService {
 
     public void processBook(BookCoverRequestDto request, MultipartFile file) {
         boolean isBookExist = bookRepository.existsByTitle(request.getTitle());
-        if (isBookExist) {
+        if (!isBookExist) {
             throw new BookExistException(ErrorCode.EXIST_BOOK);
         }
 
         String originalFilename = file.getOriginalFilename();
-        if (originalFilename.lastIndexOf(".") == -1) {
+        if (originalFilename == null || originalFilename.lastIndexOf(".") == -1) {
             throw new FileBoundException(ErrorCode.EXTENSION_NOT_FOUND);
         }
 
