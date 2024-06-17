@@ -25,17 +25,17 @@ public class BookController {
     }
 
     @PostMapping("/book")
-    public BaseResponse<BookResponseDto> addBook(@RequestPart(value = "request") BookCoverRequestDto bookCoverRequestDto,
+    public BaseResponse<BookResponseDto> addBook(@RequestPart BookCoverRequestDto request,
                                                  @RequestPart MultipartFile file) {
-        BookResponseDto response = bookService.processBook(bookCoverRequestDto, file);
+        BookResponseDto response = bookService.processBook(request, file);
         return BaseResponse.success(response);
     }
 
     @PutMapping("/book/modification/{bookId}")
     public BaseResponse<BookResponseDto> putBook(@PathVariable long bookId,
-                                                 @RequestPart(value = "request") BookCoverRequestDto requestDto,
+                                                 @RequestPart BookCoverRequestDto request,
                                                  @RequestPart(required = false) MultipartFile file) {
-        BookResponseDto response = bookService.modifyBook(bookId, requestDto, file);
+        BookResponseDto response = bookService.modifyBook(bookId, request, file);
         return BaseResponse.success(response);
     }
 

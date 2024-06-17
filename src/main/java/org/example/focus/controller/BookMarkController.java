@@ -21,7 +21,7 @@ public class BookMarkController {
     private final BookMarkService bookMarkService;
 
     @PostMapping("/bookmark/add")
-    public BaseResponse<BookMarkResponseDto> addBookMark(@RequestPart(value = "request") BookMarkRequestDto request,
+    public BaseResponse<BookMarkResponseDto> addBookMark(@RequestPart BookMarkRequestDto request,
                                                          @RequestPart MultipartFile file) {
         BookMarkResponseDto response = bookMarkService.processBookMark(request, file);
         return BaseResponse.success(response);
@@ -46,7 +46,7 @@ public class BookMarkController {
     }
 
     @PutMapping("/bookmark/modification/{bookMarkId}")
-    public BaseResponse<BookMarkResponseDto> putBookMark(@PathVariable long bookMarkId, @RequestPart(value = "request") BookMarkModifyRequestdto request,
+    public BaseResponse<BookMarkResponseDto> putBookMark(@PathVariable long bookMarkId, @RequestPart BookMarkModifyRequestdto request,
                                                          @RequestPart(required = false) MultipartFile file) {
         BookMarkResponseDto response = bookMarkService.modifyBookMark(bookMarkId, request, file);
         return BaseResponse.success(response);
