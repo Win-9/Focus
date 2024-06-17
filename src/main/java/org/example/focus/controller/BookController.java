@@ -24,10 +24,9 @@ public class BookController {
     }
 
     @PostMapping("/book")
-    public BaseResponse<Object> addBook(@RequestPart(value = "request") BookCoverRequestDto bookCoverRequestDto,
-                                        @RequestPart(value = "file") MultipartFile multipartFile) {
-        bookService.processBook(bookCoverRequestDto, multipartFile);
-        return BaseResponse.success();
+    public BaseResponse<BookResponseDto> addBook(@RequestPart(value = "request") BookCoverRequestDto bookCoverRequestDto,
+                                                 @RequestPart(value = "file") MultipartFile multipartFile) {
+        return bookService.processBook(bookCoverRequestDto, multipartFile);
     }
 
     @PutMapping("/book/{bookId}")

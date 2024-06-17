@@ -58,7 +58,7 @@ public class BookService {
         return BaseResponse.success(CalendarReadInfoResponseDto.of(readDateList, year, month));
     }
 
-    public void processBook(BookCoverRequestDto request, MultipartFile file) {
+    public BaseResponse<BookResponseDto> processBook(BookCoverRequestDto request, MultipartFile file) {
         boolean isBookExist = bookRepository.existsByTitle(request.getTitle());
         if (!isBookExist) {
             throw new BookExistException(ErrorCode.EXIST_BOOK);
@@ -86,6 +86,7 @@ public class BookService {
 
         fileRequestService.sendBookImageReqeust(ImageRequestDto.of(book), file);
         bookRepository.save(book);
+        return BaseResponse.success(BookResponseDto.from(book));
     }
 
     public BaseResponse<List<BookListResponseDto>> showBookList() {
