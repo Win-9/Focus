@@ -5,11 +5,13 @@ import org.example.focus.common.BaseResponse;
 import org.example.focus.dto.request.BookCoverRequestDto;
 import org.example.focus.dto.request.ImageRequestDto;
 import org.example.focus.dto.resopnse.BookListResponseDto;
+import org.example.focus.dto.resopnse.BookResponseDto;
 import org.example.focus.dto.resopnse.CalendarReadInfoResponseDto;
 import org.example.focus.entity.Book;
 import org.example.focus.exception.ErrorCode;
 import org.example.focus.exception.exist.BookExistException;
 import org.example.focus.exception.notFound.FileBoundException;
+import org.example.focus.exception.notexist.BookNotExistException;
 import org.example.focus.repsitory.BookMarkRepository;
 import org.example.focus.repsitory.BookRepository;
 import org.example.focus.util.EncryptUtil;
@@ -92,5 +94,27 @@ public class BookService {
                 bookList.stream()
                         .map(b -> BookListResponseDto.from(b))
                         .toList());
+    }
+
+    public BaseResponse<BookResponseDto> modifyBook(long bookId, BookCoverRequestDto request, MultipartFile file) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new BookNotExistException(ErrorCode.BOOK_NOT_EXIST));
+        book.changeBookInformation(request);
+
+        if (file != null) {
+            String originName = file.getOriginalFilename();
+            if (originName == null || originName.lastIndexOf(".") == -1) {
+                throw new FileBoundException(ErrorCode.EXTENSION_NOT_FOUND);
+            }
+
+            String extension = originName.substring(0, originName.lastIndexOf("."));
+            book.changeExtension(extension);
+            book.changeCoverImage(EncryptUtil.imageAccessUrl + request.getTitle() + "/" +
+                    request.getTitle() + "bookCover." + extension);
+
+            fileRequestService.deleteBookImage(ImageRequestDto.of(book));
+            fileRequestService.sendBookImageReqeust(ImageRequestDto.of(book), file);
+        }
+        return BaseResponse.success(BookResponseDto.from(book));
     }
 }

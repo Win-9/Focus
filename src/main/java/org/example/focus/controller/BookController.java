@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.focus.common.BaseResponse;
 import org.example.focus.dto.request.BookCoverRequestDto;
 import org.example.focus.dto.resopnse.BookListResponseDto;
+import org.example.focus.dto.resopnse.BookResponseDto;
 import org.example.focus.dto.resopnse.CalendarReadInfoResponseDto;
 import org.example.focus.service.BookService;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,13 @@ public class BookController {
                                         @RequestPart(value = "file") MultipartFile multipartFile) {
         bookService.processBook(bookCoverRequestDto, multipartFile);
         return BaseResponse.success();
+    }
+
+    @PutMapping("/book/{bookId}")
+    public BaseResponse<BookResponseDto> putBook(@PathVariable long bookId,
+                                                 @RequestPart(value = "request") BookCoverRequestDto requestDto,
+                                                 @RequestPart(value = "file", required = false) MultipartFile file) {
+        return bookService.modifyBook(bookId, requestDto, file);
     }
 
     @GetMapping("/book/list")
