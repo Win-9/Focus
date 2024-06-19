@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -116,11 +117,15 @@ public class BookMarkService {
     }
 
     public Map<LocalDate, List<AllBookMarkResponseDto>> showAllBookMarkList() {
-        List<AllBookMarkResponseDto> list = bookMarkRepository.findAll().stream()
+        List<AllBookMarkResponseDto> list = bookMarkRepository.findAllByOrderByModifiedDateDesc().stream()
                 .map(AllBookMarkResponseDto::from)
                 .toList();
 
         return list.stream()
-                .collect(Collectors.groupingBy(AllBookMarkResponseDto::getDate));
+                .collect(Collectors.groupingBy(
+                        AllBookMarkResponseDto::getDate,
+                        LinkedHashMap::new,
+                        Collectors.toList()
+                ));
     }
 }
