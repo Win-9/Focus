@@ -6,5 +6,4 @@ import lombok.Getter;
 public class BookCoverRequestDto {
     private String title;
     private String author;
-    private int page;
 }
