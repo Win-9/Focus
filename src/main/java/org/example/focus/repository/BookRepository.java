@@ -1,4 +1,4 @@
-package org.example.focus.repsitory;
+package org.example.focus.repository;
 
 import org.example.focus.entity.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
