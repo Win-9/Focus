@@ -11,7 +11,6 @@ import static org.example.focus.entity.QBookMark.*;
 public class BookMarkRepositoryImpl implements BookMarkRepositoryCustom{
     private final JPAQueryFactory queryFactory;
 
-
     @Override
     public long findBookMarkCountByLocalDate(LocalDate localDate) {
         return queryFactory
