@@ -2,6 +2,7 @@ package org.example.focus.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.focus.common.BaseResponse;
+import org.example.focus.dto.resopnse.BookMarkCountResponse;
 import org.example.focus.dto.resopnse.ContinuousReadDateResponse;
 import org.example.focus.service.DashBoardService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,12 @@ public class DashBoardController {
     @GetMapping("/continue/count")
     public BaseResponse<ContinuousReadDateResponse> getContinueCount() {
         ContinuousReadDateResponse response = dashBoardService.getCount();
+        return BaseResponse.success(response);
+    }
+
+    @GetMapping("/bookMark/count")
+    public BaseResponse<BookMarkCountResponse> getBookMarkCount() {
+        BookMarkCountResponse response = dashBoardService.getBookMarkCount();
         return BaseResponse.success(response);
     }
 }

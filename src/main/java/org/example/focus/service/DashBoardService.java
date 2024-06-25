@@ -1,6 +1,7 @@
 package org.example.focus.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.focus.dto.resopnse.BookMarkCountResponse;
 import org.example.focus.dto.resopnse.ContinuousReadDateResponse;
 import org.example.focus.repository.BookMarkRepository;
 import org.example.focus.repository.BookRepository;
@@ -72,5 +73,12 @@ public class DashBoardService {
                 .sorted()
                 .toList();
         return readDateList;
+    }
+
+    public BookMarkCountResponse getBookMarkCount() {
+        long bookMarkCount = bookMarkRepository.findBookMarkCountByLocalDate(LocalDate.now());
+        long oneMonthBeforeCount = bookMarkRepository.findBookMarkCountByLocalDate(LocalDate.now().minusMonths(1));
+
+        return BookMarkCountResponse.of(bookMarkCount, oneMonthBeforeCount);
     }
 }
