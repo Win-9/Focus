@@ -21,7 +21,7 @@ public class BookListResponseDto {
                 .title(book.getTitle())
                 .author(book.getAuthor())
                 .coverImage(book.getCoverImage())
-                .bookId(builder().bookId)
+                .bookId(book.getId())
                 .build();
     }
 }
