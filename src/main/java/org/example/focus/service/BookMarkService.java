@@ -19,8 +19,11 @@ import org.example.focus.util.FileRequestService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,7 +32,7 @@ public class BookMarkService {
     private final BookRepository bookRepository;
     private final FileRequestService fileRequestService;
 
-    public void processBookMark(BookMarkRequestDto request, MultipartFile file) {
+    public BookMarkResponseDto processBookMark(BookMarkRequestDto request, MultipartFile file) {
         boolean isBookExist = bookRepository.existsByTitle(request.getTitle());
         if (!isBookExist) {
             throw new BookNotExistException(ErrorCode.BOOK_NOT_EXIST);
@@ -46,18 +49,19 @@ public class BookMarkService {
                 .orElseThrow(() -> new BookNotExistException(ErrorCode.BOOK_NOT_EXIST));
 
         BookMark bookMark = BookMark.builder()
-                .date(LocalDateTime.now())
+                .date(LocalDate.now())
                 .page(request.getPage())
                 .text(request.getText())
                 .thumbnailImage(EncryptUtil.imageAccessUrl + request.getTitle() + "/" +
                         request.getTitle() + "thumbnail" + request.getPage() + "." + extension)
-                .modifiedDate(LocalDateTime.now())
+                .modifiedDate(LocalDate.now())
                 .extension(extension)
                 .build();
         bookMark.changeBook(book);
 
         fileRequestService.sendBookImageReqeust(ImageRequestDto.of(bookMark), file);
         bookMarkRepository.save(bookMark);
+        return BookMarkResponseDto.from(bookMark);
     }
 
     public List<AllBookMarkResponseDto> showBookMarkList(Long bookId) {
@@ -66,25 +70,25 @@ public class BookMarkService {
             throw new BookNotExistException(ErrorCode.BOOK_NOT_EXIST);
         }
 
-        List<BookMark> bookMarkList = bookMarkRepository.findAllByBookIdOrderByDateAsc(bookId);
+        List<BookMark> bookMarkList = bookMarkRepository.findAllByBookIdOrderByModifiedDateAsc(bookId);
 
         return bookMarkList.stream()
-                .map(b -> AllBookMarkResponseDto.from(b))
+                .map(AllBookMarkResponseDto::from)
                 .toList();
     }
 
     public BookMarkResponseDto showBookMark(Long bookMarkId) {
         return bookMarkRepository.findById(bookMarkId)
-                .map(b -> BookMarkResponseDto.from(b))
+                .map(BookMarkResponseDto::from)
                 .orElseThrow(() -> new BookMarkNotExistException(ErrorCode.BOOKMAKR_NOT_EXIST));
     }
 
-    public void modifyBookMark(long bookMarkId, BookMarkModifyRequestdto request, MultipartFile file) {
+    public BookMarkResponseDto modifyBookMark(long bookMarkId, BookMarkModifyRequestdto request, MultipartFile file) {
         BookMark bookMark = bookMarkRepository.findById(bookMarkId)
                 .orElseThrow(() -> new BookMarkNotExistException(ErrorCode.BOOKMAKR_NOT_EXIST));
 
         bookMark.changeBookMarkInfo(request);
-        bookMark.changeModifiedDate(LocalDateTime.now());
+        bookMark.changeModifiedDate(LocalDate.now());
 
         if (file != null) {
             String originName = file.getOriginalFilename();
@@ -102,6 +106,7 @@ public class BookMarkService {
         }
 
         bookMarkRepository.save(bookMark);
+        return BookMarkResponseDto.from(bookMark);
     }
 
     public void deleteBookMark(long bookMarkId) {
@@ -111,4 +116,16 @@ public class BookMarkService {
         fileRequestService.deleteBookImage(ImageRequestDto.of(bookMark));
     }
 
+    public Map<LocalDate, List<AllBookMarkResponseDto>> showAllBookMarkList() {
+        List<AllBookMarkResponseDto> list = bookMarkRepository.findAllByOrderByModifiedDateDesc().stream()
+                .map(AllBookMarkResponseDto::from)
+                .toList();
+
+        return list.stream()
+                .collect(Collectors.groupingBy(
+                        AllBookMarkResponseDto::getDate,
+                        LinkedHashMap::new,
+                        Collectors.toList()
+                ));
+    }
 }
