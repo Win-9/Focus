@@ -10,7 +10,9 @@ import org.example.focus.service.BookMarkService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -19,10 +21,10 @@ public class BookMarkController {
     private final BookMarkService bookMarkService;
 
     @PostMapping("/bookmark/add")
-    public BaseResponse<Object> addBookMark(@RequestPart(value = "request") BookMarkRequestDto request,
-                                            @RequestPart(value = "file") MultipartFile file) {
-        bookMarkService.processBookMark(request, file);
-        return BaseResponse.success();
+    public BaseResponse<BookMarkResponseDto> addBookMark(@RequestPart BookMarkRequestDto request,
+                                                         @RequestPart MultipartFile file) {
+        BookMarkResponseDto response = bookMarkService.processBookMark(request, file);
+        return BaseResponse.success(response);
     }
 
     @GetMapping("/bookmark/list/{bookId}")
@@ -31,17 +33,23 @@ public class BookMarkController {
         return BaseResponse.success(response);
     }
 
+    @GetMapping("/bookmark/list")
+    public BaseResponse<Map<LocalDate, List<AllBookMarkResponseDto>>> getAllBookMarkList() {
+        Map<LocalDate, List<AllBookMarkResponseDto>> map = bookMarkService.showAllBookMarkList();
+        return BaseResponse.success(map);
+    }
+
     @GetMapping("/bookmark/{bookMarkId}")
     public BaseResponse<BookMarkResponseDto> getBookMark(@PathVariable Long bookMarkId) {
         BookMarkResponseDto response = bookMarkService.showBookMark(bookMarkId);
         return BaseResponse.success(response);
     }
 
-    @PutMapping("/bookmark/{bookMarkId}")
-    public BaseResponse<Object> putBookMark(@PathVariable long bookMarkId, @RequestPart(value = "request") BookMarkModifyRequestdto request,
-                                            @RequestPart(value = "file", required = false) MultipartFile multipartFile) {
-        bookMarkService.modifyBookMark(bookMarkId, request, multipartFile);
-        return BaseResponse.success();
+    @PutMapping("/bookmark/modification/{bookMarkId}")
+    public BaseResponse<BookMarkResponseDto> putBookMark(@PathVariable long bookMarkId, @RequestPart BookMarkModifyRequestdto request,
+                                                         @RequestPart(required = false) MultipartFile file) {
+        BookMarkResponseDto response = bookMarkService.modifyBookMark(bookMarkId, request, file);
+        return BaseResponse.success(response);
     }
 
     @DeleteMapping("/bookmark/removal/{bookMarkId}")
