@@ -16,7 +16,7 @@ public class BookMarkRepositoryImpl implements BookMarkRepositoryCustom{
         return queryFactory
                 .select(bookMark.count())
                 .from(bookMark)
-                .where(bookMark.modifiedDate.eq(localDate.atStartOfDay()))
+                .where(bookMark.modifiedDate.eq(localDate))
                 .fetchOne();
     }
 }
