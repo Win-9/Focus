@@ -9,6 +9,7 @@ import org.example.focus.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +39,8 @@ public class DataInitializationService {
                         .title("Book Title " + getRandomString(5))
                         .author("Author " + getRandomString(7))
                         .coverImage("Cover Image " + getRandomString(10))
-                        .registeredDate(LocalDateTime.now().minusDays(random.nextInt(365)))
-                        .modifiedDate(LocalDateTime.now().minusDays(random.nextInt(365)))
+                        .registeredDate(LocalDate.now().minusDays(random.nextInt(365)))
+                        .modifiedDate(LocalDate.now().minusDays(random.nextInt(365)))
                         .extension("Extension " + getRandomString(3))
                         .build();
                 books.add(book);
@@ -50,12 +51,12 @@ public class DataInitializationService {
                 List<BookMark> bookMarks = new ArrayList<>();
                 for (int k = 0; k < bookMarkBatchSize; k++) {
                     BookMark bookMark = BookMark.builder()
-                            .date(LocalDateTime.now().minusDays(random.nextInt(365)))
+                            .date(LocalDate.now().minusDays(random.nextInt(365)))
                             .page(random.nextInt(500))
                             .thumbnailImage("Thumbnail Image " + getRandomString(8))
                             .text("Text " + getRandomString(20))
                             .extension("Extension " + getRandomString(3))
-                            .modifiedDate(LocalDateTime.now().minusDays(random.nextInt(365)))
+                            .modifiedDate(LocalDate.now().minusDays(random.nextInt(365)))
                             .book(book)
                             .build();
                     bookMarks.add(bookMark);
