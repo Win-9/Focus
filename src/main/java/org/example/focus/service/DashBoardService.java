@@ -3,11 +3,14 @@ package org.example.focus.service;
 import lombok.RequiredArgsConstructor;
 import org.example.focus.dto.resopnse.BookMarkCountResponse;
 import org.example.focus.dto.resopnse.ContinuousReadDateResponse;
+import org.example.focus.entity.Book;
+import org.example.focus.entity.BookMark;
 import org.example.focus.repository.BookMarkRepository;
 import org.example.focus.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -59,16 +62,16 @@ public class DashBoardService {
     private List<LocalDate> getReadDate() {
         // 책 수정 날짜 추출
         List<LocalDate> bookReadDateList = bookRepository.findAll()
-                .stream().map(a -> a.getRegisteredDate().toLocalDate())
+                .stream().map(Book::getRegisteredDate)
                 .collect(Collectors.toList());
 
         // 북마크 수정 날짜 추출
         List<LocalDate> bookMarkReadDateList = bookMarkRepository.findAll()
-                .stream().map(a -> a.getModifiedDate().toLocalDate())
+                .stream().map(BookMark::getModifiedDate)
                 .collect(Collectors.toList());
 
         List<LocalDate> readDateList = Stream.of(bookReadDateList, bookMarkReadDateList)
-                .flatMap(x -> x.stream())
+                .flatMap(Collection::stream)
                 .distinct()
                 .sorted()
                 .toList();
