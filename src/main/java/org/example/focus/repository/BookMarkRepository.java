@@ -11,6 +11,4 @@ public interface BookMarkRepository extends JpaRepository<BookMark, Long>, BookM
     List<BookMark> findAllByBookIdOrderByModifiedDateAsc(Long bookId);
 
     List<BookMark> findAllByModifiedDateBetween(LocalDateTime startDate, LocalDateTime endDate);
-
-    List<BookMark> findAllByOrderByModifiedDateDesc();
 }

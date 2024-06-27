@@ -1,13 +1,14 @@
 package org.example.focus.dto.resopnse;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 import org.example.focus.entity.BookMark;
 
 import java.time.LocalDate;
 
 @Getter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class AllBookMarkResponseDto {
     private Long id;
     private String thumbnailImage;

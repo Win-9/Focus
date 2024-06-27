@@ -117,9 +117,7 @@ public class BookMarkService {
     }
 
     public Map<LocalDate, List<AllBookMarkResponseDto>> showAllBookMarkList() {
-        List<AllBookMarkResponseDto> list = bookMarkRepository.findAllByOrderByModifiedDateDesc().stream()
-                .map(AllBookMarkResponseDto::from)
-                .toList();
+        List<AllBookMarkResponseDto> list = bookMarkRepository.findAllByOrderByModifiedDateDesc();
 
         return list.stream()
                 .collect(Collectors.groupingBy(
