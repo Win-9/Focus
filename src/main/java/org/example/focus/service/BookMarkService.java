@@ -16,6 +16,8 @@ import org.example.focus.repository.BookMarkRepository;
 import org.example.focus.repository.BookRepository;
 import org.example.focus.util.EncryptUtil;
 import org.example.focus.util.FileRequestService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -116,9 +118,10 @@ public class BookMarkService {
         fileRequestService.deleteBookImage(ImageRequestDto.of(bookMark));
     }
 
-    public Map<LocalDate, List<AllBookMarkResponseDto>> showAllBookMarkList() {
-        List<AllBookMarkResponseDto> list = bookMarkRepository.findAllByOrderByModifiedDateDesc();
-
+    public Map<LocalDate, List<AllBookMarkResponseDto>> showAllBookMarkList(Pageable pageable) {
+        Page<AllBookMarkResponseDto> pageResult = bookMarkRepository.findAllByOrderByModifiedDateDesc(pageable);
+        List<AllBookMarkResponseDto> list = pageResult.getContent();
+        pageResult.getTotalPages();
         return list.stream()
                 .collect(Collectors.groupingBy(
                         AllBookMarkResponseDto::getDate,
