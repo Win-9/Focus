@@ -5,6 +5,7 @@ import org.example.focus.dto.request.BookMarkModifyRequestdto;
 import org.example.focus.dto.request.BookMarkRequestDto;
 import org.example.focus.dto.request.ImageRequestDto;
 import org.example.focus.dto.resopnse.AllBookMarkResponseDto;
+import org.example.focus.dto.resopnse.AllBookMarkResponsePageDto;
 import org.example.focus.dto.resopnse.BookMarkResponseDto;
 import org.example.focus.entity.Book;
 import org.example.focus.entity.BookMark;
@@ -24,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -118,15 +118,15 @@ public class BookMarkService {
         fileRequestService.deleteBookImage(ImageRequestDto.of(bookMark));
     }
 
-    public Map<LocalDate, List<AllBookMarkResponseDto>> showAllBookMarkList(Pageable pageable) {
+    public AllBookMarkResponsePageDto showAllBookMarkList(Pageable pageable) {
         Page<AllBookMarkResponseDto> pageResult = bookMarkRepository.findAllByOrderByModifiedDateDesc(pageable);
         List<AllBookMarkResponseDto> list = pageResult.getContent();
-        pageResult.getTotalPages();
-        return list.stream()
+        LinkedHashMap<LocalDate, List<AllBookMarkResponseDto>> collect = list.stream()
                 .collect(Collectors.groupingBy(
                         AllBookMarkResponseDto::getDate,
                         LinkedHashMap::new,
                         Collectors.toList()
                 ));
+        return AllBookMarkResponsePageDto.from(collect, pageResult);
     }
 }
