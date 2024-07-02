@@ -11,11 +11,11 @@ import java.util.List;
 @Builder
 @Getter
 public class AllBookMarkResponsePageDto {
-    LinkedHashMap<LocalDate, List<AllBookMarkResponseDto>> elements;
-    int totalPages;
-    long totalElements;
-    int pageNumber;
-    int pageSize;
+    private LinkedHashMap<LocalDate, List<AllBookMarkResponseDto>> elements;
+    private int totalPages;
+    private long totalElements;
+    private int pageNumber;
+    private int pageSize;
 
     public static AllBookMarkResponsePageDto from(LinkedHashMap<LocalDate, List<AllBookMarkResponseDto>> elements,
                                                   Page<AllBookMarkResponseDto> pageResult) {
