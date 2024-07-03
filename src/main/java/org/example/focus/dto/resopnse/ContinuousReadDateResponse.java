@@ -1,8 +1,10 @@
 package org.example.focus.dto.resopnse;
 
 import lombok.Builder;
+import lombok.Getter;
 
 @Builder
+@Getter
 public class ContinuousReadDateResponse {
     private int continuousReadDate;
     private int maxDate;
