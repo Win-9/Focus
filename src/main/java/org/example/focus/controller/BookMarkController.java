@@ -34,8 +34,8 @@ public class BookMarkController {
     }
 
     @GetMapping("/bookmark/list")
-    public BaseResponse<AllBookMarkResponsePageDto> getAllBookMarkList(Pageable pageable) {
-        AllBookMarkResponsePageDto response = bookMarkService.showAllBookMarkList(pageable);
+    public BaseResponse<AllBookMarkResponsePageDto> getAllBookMarkList(@RequestParam(required = false) Long count, Pageable pageable) {
+        AllBookMarkResponsePageDto response = bookMarkService.showAllBookMarkList(pageable, count);
         return BaseResponse.success(response);
     }
 

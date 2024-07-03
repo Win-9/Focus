@@ -8,5 +8,5 @@ import java.time.LocalDate;
 
 public interface BookMarkRepositoryCustom {
     long findBookMarkCountByLocalDate(LocalDate localDate);
-    Page<AllBookMarkResponseDto> findAllByOrderByModifiedDateDesc(Pageable pageable);
+    Page<AllBookMarkResponseDto> findAllByOrderByModifiedDateDesc(Pageable pageable, Long count);
 }

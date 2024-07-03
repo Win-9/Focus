@@ -118,8 +118,8 @@ public class BookMarkService {
         fileRequestService.deleteBookImage(ImageRequestDto.of(bookMark));
     }
 
-    public AllBookMarkResponsePageDto showAllBookMarkList(Pageable pageable) {
-        Page<AllBookMarkResponseDto> pageResult = bookMarkRepository.findAllByOrderByModifiedDateDesc(pageable);
+    public AllBookMarkResponsePageDto showAllBookMarkList(Pageable pageable, Long count) {
+        Page<AllBookMarkResponseDto> pageResult = bookMarkRepository.findAllByOrderByModifiedDateDesc(pageable, count);
         List<AllBookMarkResponseDto> list = pageResult.getContent();
         LinkedHashMap<LocalDate, List<AllBookMarkResponseDto>> collect = list.stream()
                 .collect(Collectors.groupingBy(

@@ -1,6 +1,5 @@
 package org.example.focus.repository;
 
-import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -14,6 +13,7 @@ import org.springframework.data.support.PageableExecutionUtils;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import static org.example.focus.entity.QBookMark.*;
 
@@ -31,7 +31,7 @@ public class BookMarkRepositoryImpl implements BookMarkRepositoryCustom{
     }
 
     @Override
-    public Page<AllBookMarkResponseDto> findAllByOrderByModifiedDateDesc(Pageable pageable) {
+    public Page<AllBookMarkResponseDto> findAllByOrderByModifiedDateDesc(Pageable pageable, Long count) {
         List<AllBookMarkResponseDto> result = queryFactory
                 .select(Projections.fields(AllBookMarkResponseDto.class,
                         bookMark.id.as("id"),
@@ -45,7 +45,7 @@ public class BookMarkRepositoryImpl implements BookMarkRepositoryCustom{
         JPAQuery<BookMark> countQuery = queryFactory
                 .select(bookMark)
                 .from(bookMark);
-
-        return PageableExecutionUtils.getPage(result, pageable, countQuery::fetchCount);
+        long totalCount = Optional.ofNullable(count).orElseGet(countQuery::fetchCount);
+        return new PageImpl<>(result, pageable, totalCount);
     }
 }
