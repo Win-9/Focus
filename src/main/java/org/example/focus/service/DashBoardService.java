@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -56,19 +55,16 @@ public class DashBoardService {
                 currentStack = 1;
             }
         }
+        maxConsecutiveDays = Math.max(maxConsecutiveDays, currentStack);
         return maxConsecutiveDays;
     }
 
     private List<LocalDate> getReadDate() {
         // 책 수정 날짜 추출
-        List<LocalDate> bookReadDateList = bookRepository.findAll()
-                .stream().map(Book::getRegisteredDate)
-                .collect(Collectors.toList());
+        List<LocalDate> bookReadDateList = bookRepository.findAllBookToLocalDate();
 
         // 북마크 수정 날짜 추출
-        List<LocalDate> bookMarkReadDateList = bookMarkRepository.findAll()
-                .stream().map(BookMark::getModifiedDate)
-                .collect(Collectors.toList());
+        List<LocalDate> bookMarkReadDateList = bookMarkRepository.findAllBookMarkToLocalDate();
 
         List<LocalDate> readDateList = Stream.of(bookReadDateList, bookMarkReadDateList)
                 .flatMap(Collection::stream)
