@@ -48,4 +48,12 @@ public class BookMarkRepositoryImpl implements BookMarkRepositoryCustom{
         long totalCount = Optional.ofNullable(count).orElseGet(countQuery::fetchCount);
         return new PageImpl<>(result, pageable, totalCount);
     }
+
+    @Override
+    public List<LocalDate> findAllBookMarkToLocalDate() {
+        return queryFactory
+                .select(bookMark.modifiedDate)
+                .from(bookMark)
+                .fetch();
+    }
 }

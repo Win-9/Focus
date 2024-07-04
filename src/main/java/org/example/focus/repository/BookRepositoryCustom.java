@@ -1,5 +1,8 @@
 package org.example.focus.repository;
 
-public interface BookRepositoryCustom {
+import java.time.LocalDate;
+import java.util.List;
 
+public interface BookRepositoryCustom {
+    List<LocalDate> findAllBookToLocalDate();
 }
