@@ -32,7 +32,7 @@ public class DashBoardService {
         return ContinuousReadDateResponse.of(continueousDays, maxConsecutiveDays);
     }
 
-    private static int getContinueousDays(List<LocalDate> readDateList, LocalDate current) {
+    private int getContinueousDays(List<LocalDate> readDateList, LocalDate current) {
         int continueousDays = 0;
         for (int i = readDateList.size() - 1; i >= 0; i--) {
             if (!current.equals(readDateList.get(i))) {
@@ -44,7 +44,7 @@ public class DashBoardService {
         return continueousDays;
     }
 
-    private static int getMaxConsecutiveDays(List<LocalDate> readDateList) {
+    private int getMaxConsecutiveDays(List<LocalDate> readDateList) {
         int currentStack = 1;
         int maxConsecutiveDays = 0;
         for (int i = 1; i < readDateList.size(); i++) {
