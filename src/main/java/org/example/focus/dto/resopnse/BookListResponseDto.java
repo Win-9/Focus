@@ -15,7 +15,6 @@ public class BookListResponseDto {
     private String title;
     private String author;
     private String coverImage;
-    private long bookId;
 
     public static BookListResponseDto from(Book book) {
         return BookListResponseDto.builder()
