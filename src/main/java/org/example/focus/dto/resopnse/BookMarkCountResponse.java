@@ -9,10 +9,10 @@ public class BookMarkCountResponse {
     private long bookMarkCount;
     private double changeAmount;
 
-    public static BookMarkCountResponse of(long bookMarkCount, long changeAmount) {
+    public static BookMarkCountResponse of(long bookMarkCount, long thisMonthBookMakrCount, long changeAmount) {
         return BookMarkCountResponse.builder()
                 .bookMarkCount(bookMarkCount)
-                .changeAmount((bookMarkCount - changeAmount) / 100)
+                .changeAmount((thisMonthBookMakrCount - changeAmount) / 100)
                 .build();
     }
 }

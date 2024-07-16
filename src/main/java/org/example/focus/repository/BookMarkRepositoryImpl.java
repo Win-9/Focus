@@ -9,7 +9,6 @@ import org.example.focus.entity.BookMark;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.support.PageableExecutionUtils;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -20,15 +19,6 @@ import static org.example.focus.entity.QBookMark.*;
 @RequiredArgsConstructor
 public class BookMarkRepositoryImpl implements BookMarkRepositoryCustom{
     private final JPAQueryFactory queryFactory;
-
-    @Override
-    public long findBookMarkCountByLocalDate(LocalDate localDate) {
-        return queryFactory
-                .select(bookMark.count())
-                .from(bookMark)
-                .where(bookMark.modifiedDate.eq(localDate))
-                .fetchOne();
-    }
 
     @Override
     public Page<AllBookMarkResponseDto> findAllByOrderByModifiedDateDesc(Pageable pageable, Long count) {
@@ -55,5 +45,14 @@ public class BookMarkRepositoryImpl implements BookMarkRepositoryCustom{
                 .select(bookMark.modifiedDate)
                 .from(bookMark)
                 .fetch();
+    }
+
+    @Override
+    public long findBookMarkCountByLocalDateMonth(int month) {
+        return queryFactory
+                .select()
+                .from(bookMark)
+                .where(bookMark.modifiedDate.month().eq(month))
+                .fetchCount();
     }
 }

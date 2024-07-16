@@ -3,8 +3,6 @@ package org.example.focus.service;
 import lombok.RequiredArgsConstructor;
 import org.example.focus.dto.resopnse.BookMarkCountResponse;
 import org.example.focus.dto.resopnse.ContinuousReadDateResponse;
-import org.example.focus.entity.Book;
-import org.example.focus.entity.BookMark;
 import org.example.focus.repository.BookMarkRepository;
 import org.example.focus.repository.BookRepository;
 import org.springframework.stereotype.Service;
@@ -75,9 +73,9 @@ public class DashBoardService {
     }
 
     public BookMarkCountResponse getBookMarkCount() {
-        long bookMarkCount = bookMarkRepository.findBookMarkCountByLocalDate(LocalDate.now());
-        long oneMonthBeforeCount = bookMarkRepository.findBookMarkCountByLocalDate(LocalDate.now().minusMonths(1));
-
-        return BookMarkCountResponse.of(bookMarkCount, oneMonthBeforeCount);
+        long bookMarkCount = bookMarkRepository.count();
+        long thisMonthBookMakrCount = bookMarkRepository.findBookMarkCountByLocalDateMonth(LocalDate.now().getMonthValue());
+        long oneMonthBeforeCount = bookMarkRepository.findBookMarkCountByLocalDateMonth(LocalDate.now().minusMonths(1).getMonthValue());
+        return BookMarkCountResponse.of(bookMarkCount, thisMonthBookMakrCount, oneMonthBeforeCount);
     }
 }
