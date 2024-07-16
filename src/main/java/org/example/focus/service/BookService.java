@@ -1,6 +1,7 @@
 package org.example.focus.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.focus.common.BaseResponse;
 import org.example.focus.dto.request.BookCoverRequestDto;
 import org.example.focus.dto.request.ImageRequestDto;
 import org.example.focus.dto.resopnse.BookListResponseDto;
@@ -12,8 +13,8 @@ import org.example.focus.exception.ErrorCode;
 import org.example.focus.exception.exist.BookExistException;
 import org.example.focus.exception.notFound.FileBoundException;
 import org.example.focus.exception.notexist.BookNotExistException;
-import org.example.focus.repsitory.BookMarkRepository;
-import org.example.focus.repsitory.BookRepository;
+import org.example.focus.repository.BookMarkRepository;
+import org.example.focus.repository.BookRepository;
 import org.example.focus.util.EncryptUtil;
 import org.example.focus.util.FileRequestService;
 import org.springframework.stereotype.Service;

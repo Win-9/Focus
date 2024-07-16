@@ -5,14 +5,14 @@ import org.example.focus.common.BaseResponse;
 import org.example.focus.dto.request.BookMarkModifyRequestdto;
 import org.example.focus.dto.request.BookMarkRequestDto;
 import org.example.focus.dto.resopnse.AllBookMarkResponseDto;
+import org.example.focus.dto.resopnse.AllBookMarkResponsePageDto;
 import org.example.focus.dto.resopnse.BookMarkResponseDto;
 import org.example.focus.service.BookMarkService;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -34,9 +34,9 @@ public class BookMarkController {
     }
 
     @GetMapping("/bookmark/list")
-    public BaseResponse<Map<LocalDate, List<AllBookMarkResponseDto>>> getAllBookMarkList() {
-        Map<LocalDate, List<AllBookMarkResponseDto>> map = bookMarkService.showAllBookMarkList();
-        return BaseResponse.success(map);
+    public BaseResponse<AllBookMarkResponsePageDto> getAllBookMarkList(@RequestParam(required = false) Long count, Pageable pageable) {
+        AllBookMarkResponsePageDto response = bookMarkService.showAllBookMarkList(pageable, count);
+        return BaseResponse.success(response);
     }
 
     @GetMapping("/bookmark/{bookMarkId}")

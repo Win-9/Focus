@@ -15,6 +15,9 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "book_mark", indexes = {
+        @Index(name = "idx_modified_date_desc", columnList = "modified_date DESC")
+})
 public class BookMark {
 
     @Id

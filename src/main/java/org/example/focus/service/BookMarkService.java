@@ -5,6 +5,7 @@ import org.example.focus.dto.request.BookMarkModifyRequestdto;
 import org.example.focus.dto.request.BookMarkRequestDto;
 import org.example.focus.dto.request.ImageRequestDto;
 import org.example.focus.dto.resopnse.AllBookMarkResponseDto;
+import org.example.focus.dto.resopnse.AllBookMarkResponsePageDto;
 import org.example.focus.dto.resopnse.BookMarkResponseDto;
 import org.example.focus.entity.Book;
 import org.example.focus.entity.BookMark;
@@ -12,17 +13,18 @@ import org.example.focus.exception.ErrorCode;
 import org.example.focus.exception.notFound.FileBoundException;
 import org.example.focus.exception.notexist.BookMarkNotExistException;
 import org.example.focus.exception.notexist.BookNotExistException;
-import org.example.focus.repsitory.BookMarkRepository;
-import org.example.focus.repsitory.BookRepository;
+import org.example.focus.repository.BookMarkRepository;
+import org.example.focus.repository.BookRepository;
 import org.example.focus.util.EncryptUtil;
 import org.example.focus.util.FileRequestService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -116,16 +118,15 @@ public class BookMarkService {
         fileRequestService.deleteBookImage(ImageRequestDto.of(bookMark));
     }
 
-    public Map<LocalDate, List<AllBookMarkResponseDto>> showAllBookMarkList() {
-        List<AllBookMarkResponseDto> list = bookMarkRepository.findAllByOrderByModifiedDateDesc().stream()
-                .map(AllBookMarkResponseDto::from)
-                .toList();
-
-        return list.stream()
+    public AllBookMarkResponsePageDto showAllBookMarkList(Pageable pageable, Long count) {
+        Page<AllBookMarkResponseDto> pageResult = bookMarkRepository.findAllByOrderByModifiedDateDesc(pageable, count);
+        List<AllBookMarkResponseDto> list = pageResult.getContent();
+        LinkedHashMap<LocalDate, List<AllBookMarkResponseDto>> collect = list.stream()
                 .collect(Collectors.groupingBy(
                         AllBookMarkResponseDto::getDate,
                         LinkedHashMap::new,
                         Collectors.toList()
                 ));
+        return AllBookMarkResponsePageDto.from(collect, pageResult);
     }
 }
