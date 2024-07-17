@@ -39,7 +39,7 @@ public class BookController {
         return BaseResponse.success(response);
     }
 
-    @DeleteMapping("/book/removal/{bookId}")
+    @DeleteMapping("/book/{bookId}")
     public BaseResponse<Object> deleteBook(@PathVariable long bookId) {
         bookService.removeBook(bookId);
         return BaseResponse.success();
