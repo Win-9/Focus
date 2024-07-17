@@ -2,6 +2,8 @@ package org.example.focus.util;
 
 import lombok.RequiredArgsConstructor;
 import org.example.focus.dto.request.ImageRequestDto;
+import org.example.focus.exception.ErrorCode;
+import org.example.focus.exception.notFound.FileBoundException;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -29,6 +31,11 @@ public class FileRequestService {
                 requestEntity,
                 String.class);
 
+        HttpStatusCode statusCode = response.getStatusCode();
+        if (statusCode.is5xxServerError()) {
+            throw new FileBoundException(ErrorCode.IMAGE_SAVE_EXCEPTION);
+        }
+
         return response.getBody();
     }
 
@@ -42,6 +49,11 @@ public class FileRequestService {
                 EncryptUtil.imageDeleteUrl,
                 requestEntity,
                 String.class);
+        HttpStatusCode statusCode = response.getStatusCode();
+        if (statusCode.is5xxServerError()) {
+            throw new FileBoundException(ErrorCode.IMAGE_SAVE_EXCEPTION);
+        }
+
         return response.getBody();
     }
 }
