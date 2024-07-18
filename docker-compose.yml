@@ -1,0 +1,21 @@
+services:
+  imageHost:
+    image: win9/imagehost:0.0.1
+    ports:
+      - "2022:2022"
+    volumes:
+      - imagehost-data:/var/lib/imagehost/data
+
+  focus:
+    build: .
+    restart: on-failure
+    ports:
+      - "7878:8080"
+    volumes:
+      - focus-data:/focusData/data
+    depends_on:
+      - imageHost
+
+volumes:
+  imagehost-data:
+  focus-data:
