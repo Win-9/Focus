@@ -8,6 +8,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,13 +27,13 @@ public class FileRequestService {
         body.add("file", file.getResource());
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-        ResponseEntity<String> response = restTemplate.postForEntity(
-                EncryptUtil.imageSaveUrl,
-                requestEntity,
-                String.class);
-
-        HttpStatusCode statusCode = response.getStatusCode();
-        if (statusCode.is5xxServerError()) {
+        ResponseEntity<String> response = null;
+        try {
+            response = restTemplate.postForEntity(
+                    EncryptUtil.imageSaveUrl,
+                    requestEntity,
+                    String.class);
+        } catch (Exception e) {
             throw new FileBoundException(ErrorCode.IMAGE_SAVE_EXCEPTION);
         }
 
@@ -43,14 +44,14 @@ public class FileRequestService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-
         HttpEntity<ImageRequestDto> requestEntity = new HttpEntity<>(request, headers);
-        ResponseEntity<String> response = restTemplate.postForEntity(
-                EncryptUtil.imageDeleteUrl,
-                requestEntity,
-                String.class);
-        HttpStatusCode statusCode = response.getStatusCode();
-        if (statusCode.is5xxServerError()) {
+        ResponseEntity<String> response = null;
+        try {
+            response = restTemplate.postForEntity(
+                    EncryptUtil.imageSaveUrl,
+                    requestEntity,
+                    String.class);
+        } catch (Exception e) {
             throw new FileBoundException(ErrorCode.IMAGE_SAVE_EXCEPTION);
         }
 
