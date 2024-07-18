@@ -31,7 +31,7 @@ public class BookController {
         return BaseResponse.success(response);
     }
 
-    @PutMapping("/book/modification/{bookId}")
+    @PutMapping("/book/{bookId}")
     public BaseResponse<BookResponseDto> putBook(@PathVariable long bookId,
                                                  @RequestPart BookCoverRequestDto request,
                                                  @RequestPart(required = false) MultipartFile file) {
