@@ -45,14 +45,14 @@ public class BookMarkController {
         return BaseResponse.success(response);
     }
 
-    @PutMapping("/bookmark/modification/{bookMarkId}")
+    @PutMapping("/bookmark/{bookMarkId}")
     public BaseResponse<BookMarkResponseDto> putBookMark(@PathVariable long bookMarkId, @RequestPart BookMarkModifyRequestdto request,
                                                          @RequestPart(required = false) MultipartFile file) {
         BookMarkResponseDto response = bookMarkService.modifyBookMark(bookMarkId, request, file);
         return BaseResponse.success(response);
     }
 
-    @DeleteMapping("/bookmark/removal/{bookMarkId}")
+    @DeleteMapping("/bookmark/{bookMarkId}")
     public BaseResponse<Object> removeBookMark(@PathVariable long bookMarkId) {
         bookMarkService.deleteBookMark(bookMarkId);
         return BaseResponse.success();
