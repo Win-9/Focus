@@ -21,6 +21,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+
       - name: properties 설정
         run: |
           mkdir -p ./src/main/resources/env
@@ -30,6 +31,21 @@ jobs:
           printf "%s" "${{ secrets.MYSQL}}" > ./src/main/resources/env/mysql.yml
           printf "%s" "${{ secrets.SERVICE_PORT}}" > ./src/main/resources/env/port.yml
           printf "%s" "${{ secrets.IMAGE}}" > ./src/main/resources/env/image.yml
+
+      - name: gradlew 권한 설정
+        run: |
+          chmod +x ./gradlew
+
+      - name: 빌드
+        run: |
+          ./gradlew clean build -x test
+      - name: JAR 파일 복사
+        uses: actions/upload-artifact@v2
+        with:
+          name: focus-jar
+          path: |
+            build/libs/*.jar
+            
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
