@@ -64,8 +64,10 @@ jobs:
           COMPOSE_DOCKER_CLI_BUILD: 1
         run: |
           pwd
+          ls
           cd ..
           pwd
+          ls
           docker-compose -f docker-compose.yml build
           docker-compose -f docker-compose.yml push
 
