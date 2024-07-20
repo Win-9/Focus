@@ -8,6 +8,8 @@ services:
 
   focus:
     build: .
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     image: win9/focus:0.0.1
     restart: on-failure
     ports:
