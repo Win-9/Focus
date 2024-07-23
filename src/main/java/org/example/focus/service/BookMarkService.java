@@ -53,7 +53,7 @@ public class BookMarkService {
         BookMark bookMark = BookMark.builder()
                 .date(LocalDate.now())
                 .page(request.getPage())
-                .text(request.getText())
+                .content(request.getContent())
                 .thumbnailImage(EncryptUtil.imageAccessUrl + request.getTitle() + "/" +
                         request.getTitle() + "thumbnail" + request.getPage() + "." + extension)
                 .modifiedDate(LocalDate.now())
