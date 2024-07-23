@@ -22,7 +22,7 @@ public class DashBoardController {
         return BaseResponse.success(response);
     }
 
-    @GetMapping("/bookMark/count")
+    @GetMapping("/bookmark/count")
     public BaseResponse<BookMarkCountResponse> getBookMarkCount() {
         BookMarkCountResponse response = dashBoardService.getBookMarkCount();
         return BaseResponse.success(response);
