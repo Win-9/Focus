@@ -35,10 +35,8 @@ public class BookMarkService {
     private final FileRequestService fileRequestService;
 
     public BookMarkResponseDto processBookMark(BookMarkRequestDto request, MultipartFile file) {
-        boolean isBookExist = bookRepository.existsByTitle(request.getTitle());
-        if (!isBookExist) {
-            throw new BookNotExistException(ErrorCode.BOOK_NOT_EXIST);
-        }
+        Book book = bookRepository.findById(request.getBookId())
+                .orElseThrow(() -> new BookNotExistException(ErrorCode.BOOK_NOT_EXIST));
 
         String originName = file.getOriginalFilename();
 
@@ -47,15 +45,13 @@ public class BookMarkService {
         }
 
         String extension = originName.substring(originName.lastIndexOf(".") + 1);
-        Book book = bookRepository.findById(request.getBookId())
-                .orElseThrow(() -> new BookNotExistException(ErrorCode.BOOK_NOT_EXIST));
 
         BookMark bookMark = BookMark.builder()
                 .date(LocalDate.now())
                 .page(request.getPage())
                 .content(request.getContent())
-                .thumbnailImage(EncryptUtil.imageAccessUrl + request.getTitle() + "/" +
-                        request.getTitle() + "thumbnail" + request.getPage() + "." + extension)
+                .thumbnailImage(EncryptUtil.imageAccessUrl + book.getTitle() + "/" +
+                        book.getTitle() + "thumbnail" + request.getPage() + "." + extension)
                 .modifiedDate(LocalDate.now())
                 .extension(extension)
                 .build();
@@ -100,8 +96,8 @@ public class BookMarkService {
 
             String extension = originName.substring(0, originName.lastIndexOf("."));
             bookMark.changeExtension(extension);
-            bookMark.changeThubnail(EncryptUtil.imageAccessUrl + request.getTitle() + "/" +
-                    request.getTitle() + "thumbnail" + request.getPage() + "." + extension);
+            bookMark.changeThubnail(EncryptUtil.imageAccessUrl + bookMark.getBook().getTitle() + "/" +
+                    bookMark.getBook().getTitle() + "thumbnail" + request.getPage() + "." + extension);
 
             fileRequestService.deleteBookImage(ImageRequestDto.of(bookMark));
             fileRequestService.sendBookImageReqeust(ImageRequestDto.of(bookMark), file);
