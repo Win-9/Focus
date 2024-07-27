@@ -1,6 +1,7 @@
 package org.example.focus.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.focus.dto.request.BookMarkModifyRequestdto;
 import org.example.focus.dto.request.BookMarkRequestDto;
 import org.example.focus.dto.request.ImageRequestDto;
@@ -29,6 +30,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BookMarkService {
     private final BookMarkRepository bookMarkRepository;
     private final BookRepository bookRepository;
@@ -57,7 +59,8 @@ public class BookMarkService {
                 .build();
         bookMark.changeBook(book);
 
-        fileRequestService.sendBookImageReqeust(ImageRequestDto.of(bookMark), file);
+        String response = fileRequestService.sendBookImageReqeust(ImageRequestDto.of(bookMark), file);
+        log.info("imageHost Save = {}", response);
         bookMarkRepository.save(bookMark);
         return BookMarkResponseDto.from(bookMark);
     }
@@ -100,7 +103,8 @@ public class BookMarkService {
                     bookMark.getBook().getTitle() + "thumbnail" + request.getPage() + "." + extension);
 
             fileRequestService.deleteBookImage(ImageRequestDto.of(bookMark));
-            fileRequestService.sendBookImageReqeust(ImageRequestDto.of(bookMark), file);
+            String response = fileRequestService.sendBookImageReqeust(ImageRequestDto.of(bookMark), file);
+            log.info("imageHost Save = {}", response);
         }
 
         bookMarkRepository.save(bookMark);

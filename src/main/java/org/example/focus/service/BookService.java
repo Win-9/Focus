@@ -1,7 +1,7 @@
 package org.example.focus.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.focus.common.BaseResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.example.focus.dto.request.BookCoverRequestDto;
 import org.example.focus.dto.request.ImageRequestDto;
 import org.example.focus.dto.resopnse.BookListResponseDto;
@@ -30,6 +30,7 @@ import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BookService {
     private final BookRepository bookRepository;
     private final FileRequestService fileRequestService;
@@ -86,7 +87,8 @@ public class BookService {
                 .registeredDate(LocalDate.now())
                 .build();
 
-        fileRequestService.sendBookImageReqeust(ImageRequestDto.of(book), file);
+        String response = fileRequestService.sendBookImageReqeust(ImageRequestDto.of(book), file);
+        log.info("imageHost Save = {}", response);
         bookRepository.save(book);
         return BookResponseDto.from(book);
     }
@@ -115,7 +117,8 @@ public class BookService {
                     request.getTitle() + "bookCover." + extension);
 
             fileRequestService.deleteBookImage(ImageRequestDto.of(book));
-            fileRequestService.sendBookImageReqeust(ImageRequestDto.of(book), file);
+            String response = fileRequestService.sendBookImageReqeust(ImageRequestDto.of(book), file);
+            log.info("imageHost Save = {}", response);
         }
         return BookResponseDto.from(book);
     }
@@ -124,5 +127,11 @@ public class BookService {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new BookNotExistException(ErrorCode.BOOK_NOT_EXIST));
         bookRepository.delete(book);
+    }
+
+    public BookResponseDto showBook(long bookId) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new BookNotExistException(ErrorCode.BOOK_NOT_EXIST));
+        return BookResponseDto.from(book);
     }
 }
