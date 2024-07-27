@@ -24,6 +24,12 @@ public class BookController {
         return BaseResponse.success(response);
     }
 
+    @GetMapping("/book/{bookId}")
+    public BaseResponse<BookResponseDto> getBook(@PathVariable long bookId) {
+        BookResponseDto response = bookService.showBook(bookId);
+        return BaseResponse.success(response);
+    }
+
     @PostMapping("/book")
     public BaseResponse<BookResponseDto> addBook(@RequestPart BookCoverRequestDto request,
                                                  @RequestPart MultipartFile file) {
