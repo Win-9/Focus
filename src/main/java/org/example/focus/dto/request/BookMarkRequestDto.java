@@ -5,8 +5,7 @@ import lombok.Getter;
 @Getter
 public class BookMarkRequestDto {
     private long bookId;
-    private String title;
-    private String text;
+    private String content;
     private int page;
 }
 

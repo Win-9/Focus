@@ -20,7 +20,7 @@ import java.util.List;
 public class BookMarkController {
     private final BookMarkService bookMarkService;
 
-    @PostMapping("/bookmark/add")
+    @PostMapping("/bookmark")
     public BaseResponse<BookMarkResponseDto> addBookMark(@RequestPart BookMarkRequestDto request,
                                                          @RequestPart MultipartFile file) {
         BookMarkResponseDto response = bookMarkService.processBookMark(request, file);

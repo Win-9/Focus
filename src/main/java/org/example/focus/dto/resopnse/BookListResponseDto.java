@@ -14,14 +14,14 @@ public class BookListResponseDto {
     private Long id;
     private String title;
     private String author;
-    private String coverImage;
+    private String coverImageUrl;
 
     public static BookListResponseDto from(Book book) {
         return BookListResponseDto.builder()
                 .id(book.getId())
                 .title(book.getTitle())
                 .author(book.getAuthor())
-                .coverImage(book.getCoverImage())
+                .coverImageUrl(book.getCoverImage())
                 .build();
     }
 }

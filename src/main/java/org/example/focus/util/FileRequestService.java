@@ -1,6 +1,7 @@
 package org.example.focus.util;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.focus.dto.request.ImageRequestDto;
 import org.example.focus.exception.ErrorCode;
 import org.example.focus.exception.notFound.FileBoundException;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class FileRequestService {
 
     private final RestTemplate restTemplate = new RestTemplate();
@@ -34,6 +36,7 @@ public class FileRequestService {
                     requestEntity,
                     String.class);
         } catch (Exception e) {
+            log.error(e.getMessage());
             throw new FileBoundException(ErrorCode.IMAGE_SAVE_EXCEPTION);
         }
 

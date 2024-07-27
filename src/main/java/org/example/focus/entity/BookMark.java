@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.example.focus.dto.request.BookMarkModifyRequestdto;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -27,7 +26,7 @@ public class BookMark {
     private LocalDate date;
     private int page;
     private String thumbnailImage;
-    private String text;
+    private String content;
     private String extension;
     private LocalDate modifiedDate;
 
@@ -36,7 +35,7 @@ public class BookMark {
     private Book book;
 
     public void changeBookMarkInfo(BookMarkModifyRequestdto request) {
-        this.text = request.getText();
+        this.content = request.getContent();
         this.page = request.getPage();
     }
 

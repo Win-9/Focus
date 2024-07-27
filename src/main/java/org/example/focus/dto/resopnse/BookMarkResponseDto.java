@@ -21,7 +21,7 @@ public class BookMarkResponseDto {
                 .thumbnailImage(bookMark.getThumbnailImage())
                 .date(bookMark.getDate())
                 .page(bookMark.getPage())
-                .text(bookMark.getText())
+                .text(bookMark.getContent())
                 .build();
     }
 }

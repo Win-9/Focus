@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class BookMarkModifyRequestdto {
-    private String title;
-    private String text;
+    private String content;
     private int page;
 }

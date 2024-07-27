@@ -1,6 +1,6 @@
 services:
   imageHost:
-    image: win9/imagehost:0.0.1
+    image: win9/imagehost:0.0.2
     ports:
       - "2022:2022"
     volumes:
