@@ -14,6 +14,7 @@ public class AllBookMarkResponseDto {
     private String thumbnailImage;
     private LocalDate date;
     private int page;
+    private BookResponseDto book;
 
     public static AllBookMarkResponseDto from(BookMark bookMark) {
         return AllBookMarkResponseDto.builder()
@@ -21,6 +22,7 @@ public class AllBookMarkResponseDto {
                 .thumbnailImage(bookMark.getThumbnailImage())
                 .date(bookMark.getModifiedDate())
                 .page(bookMark.getPage())
+                .book(BookResponseDto.from(bookMark.getBook()))
                 .build();
     }
 }

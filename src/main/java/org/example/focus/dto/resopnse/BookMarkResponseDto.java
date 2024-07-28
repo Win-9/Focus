@@ -14,6 +14,7 @@ public class BookMarkResponseDto {
     private LocalDate date;
     private String text;
     private int page;
+    private BookResponseDto book;
 
     public static BookMarkResponseDto from(BookMark bookMark) {
         return BookMarkResponseDto.builder()
@@ -22,6 +23,7 @@ public class BookMarkResponseDto {
                 .date(bookMark.getDate())
                 .page(bookMark.getPage())
                 .text(bookMark.getContent())
+                .book(BookResponseDto.from(bookMark.getBook()))
                 .build();
     }
 }
