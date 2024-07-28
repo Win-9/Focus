@@ -12,16 +12,17 @@ public class BookMarkResponseDto {
     private Long id;
     private String thumbnailImage;
     private LocalDate date;
-    private String text;
+    private String content;
     private int page;
-
+    private BookResponseDto book;
     public static BookMarkResponseDto from(BookMark bookMark) {
         return BookMarkResponseDto.builder()
                 .id(bookMark.getId())
                 .thumbnailImage(bookMark.getThumbnailImage())
                 .date(bookMark.getDate())
                 .page(bookMark.getPage())
-                .text(bookMark.getContent())
+                .content(bookMark.getContent())
+                .book(BookResponseDto.from(bookMark.getBook()))
                 .build();
     }
 }
