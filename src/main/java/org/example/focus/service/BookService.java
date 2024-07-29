@@ -67,28 +67,31 @@ public class BookService {
             throw new BookExistException(ErrorCode.EXIST_BOOK);
         }
 
-        String originalFilename = file.getOriginalFilename();
-        if (originalFilename == null || originalFilename.lastIndexOf(".") == -1) {
-            throw new FileBoundException(ErrorCode.EXTENSION_NOT_FOUND);
-        }
-
-        String extension = "";
-        if (originalFilename != null && originalFilename.contains(".")) {
-            extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
-        }
-
         Book book = Book.builder()
                 .title(request.getTitle())
                 .author(request.getAuthor())
-                .extension(extension)
-                .coverImage(EncryptUtil.imageAccessUrl + request.getTitle() + "/" +
-                        request.getTitle() + "bookCover." + extension)
                 .modifiedDate(LocalDate.now())
                 .registeredDate(LocalDate.now())
                 .build();
 
-        String response = fileRequestService.sendBookImageReqeust(ImageRequestDto.of(book), file);
-        log.info("imageHost Save = {}", response);
+        if (!file.isEmpty()) {
+            String originalFilename = file.getOriginalFilename();
+            if (originalFilename == null || originalFilename.lastIndexOf(".") == -1) {
+                throw new FileBoundException(ErrorCode.EXTENSION_NOT_FOUND);
+            }
+
+            String extension = "";
+            if (originalFilename != null && originalFilename.contains(".")) {
+                extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+            }
+
+            book.changeExtension(extension);
+            book.changeCoverImage(EncryptUtil.imageAccessUrl + request.getTitle() + "/" +
+                    request.getTitle() + "bookCover." + extension);
+
+            String response = fileRequestService.sendBookImageReqeust(ImageRequestDto.of(book), file);
+            log.info("imageHost Save = {}", response);
+        }
         bookRepository.save(book);
         return BookResponseDto.from(book);
     }

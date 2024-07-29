@@ -33,7 +33,7 @@ public class BookController {
 
     @PostMapping("/book")
     public ResponseEntity<BookResponseDto> addBook(@RequestPart BookCoverRequestDto request,
-                                                   @RequestPart MultipartFile file) {
+                                                   @RequestPart(required = false) MultipartFile file) {
         BookResponseDto response = bookService.processBook(request, file);
         return ResponseEntity.ok(response);
     }
