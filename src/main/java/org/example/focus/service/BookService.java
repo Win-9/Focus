@@ -75,15 +75,8 @@ public class BookService {
                 .build();
 
         if (!file.isEmpty()) {
-            String originalFilename = file.getOriginalFilename();
-            if (originalFilename == null || originalFilename.lastIndexOf(".") == -1) {
-                throw new FileBoundException(ErrorCode.EXTENSION_NOT_FOUND);
-            }
-
-            String extension = "";
-            if (originalFilename != null && originalFilename.contains(".")) {
-                extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
-            }
+            String originalFilename = getOriginFileName(file);
+            String extension = getExtensionFromOriginFilename(originalFilename);
 
             book.changeExtension(extension);
             book.changeCoverImage(EncryptUtil.imageAccessUrl + request.getTitle() + "/" +
@@ -94,6 +87,22 @@ public class BookService {
         }
         bookRepository.save(book);
         return BookResponseDto.from(book);
+    }
+
+    private String getExtensionFromOriginFilename(String originalFilename) {
+        String extension = "";
+        if (originalFilename != null && originalFilename.contains(".")) {
+            extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+        }
+        return extension;
+    }
+
+    private String getOriginFileName(MultipartFile file) {
+        String originalFilename = file.getOriginalFilename();
+        if (originalFilename == null || originalFilename.lastIndexOf(".") == -1) {
+            throw new FileBoundException(ErrorCode.EXTENSION_NOT_FOUND);
+        }
+        return originalFilename;
     }
 
     public List<BookListResponseDto> showBookList() {
@@ -109,12 +118,9 @@ public class BookService {
         book.changeBookInformation(request);
 
         if (file != null) {
-            String originName = file.getOriginalFilename();
-            if (originName == null || originName.lastIndexOf(".") == -1) {
-                throw new FileBoundException(ErrorCode.EXTENSION_NOT_FOUND);
-            }
+            String originFilename = getOriginFileName(file);
+            String extension = getExtensionFromOriginFilename(originFilename);
 
-            String extension = originName.substring(originName.lastIndexOf(".") + 1);
             book.changeExtension(extension);
             book.changeCoverImage(EncryptUtil.imageAccessUrl + request.getTitle() + "/" +
                     request.getTitle() + "bookCover." + extension);
