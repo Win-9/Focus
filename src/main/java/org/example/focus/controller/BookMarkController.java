@@ -9,6 +9,7 @@ import org.example.focus.dto.resopnse.AllBookMarkResponsePageDto;
 import org.example.focus.dto.resopnse.BookMarkResponseDto;
 import org.example.focus.service.BookMarkService;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,35 +22,35 @@ public class BookMarkController {
     private final BookMarkService bookMarkService;
 
     @PostMapping("/bookmark")
-    public BaseResponse<BookMarkResponseDto> addBookMark(@RequestPart BookMarkRequestDto request,
-                                                         @RequestPart MultipartFile file) {
+    public ResponseEntity<BookMarkResponseDto> addBookMark(@RequestPart BookMarkRequestDto request,
+                                                           @RequestPart(required = false) MultipartFile file) {
         BookMarkResponseDto response = bookMarkService.processBookMark(request, file);
-        return BaseResponse.success(response);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/bookmark/list/{bookId}")
-    public BaseResponse<List<AllBookMarkResponseDto>> getBookMarkList(@PathVariable Long bookId) {
+    public ResponseEntity<List<AllBookMarkResponseDto>> getBookMarkList(@PathVariable Long bookId) {
         List<AllBookMarkResponseDto> response = bookMarkService.showBookMarkList(bookId);
-        return BaseResponse.success(response);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/bookmark/list")
-    public BaseResponse<AllBookMarkResponsePageDto> getAllBookMarkList(@RequestParam(required = false) Long count, Pageable pageable) {
+    public ResponseEntity<AllBookMarkResponsePageDto> getAllBookMarkList(@RequestParam(required = false) Long count, Pageable pageable) {
         AllBookMarkResponsePageDto response = bookMarkService.showAllBookMarkList(pageable, count);
-        return BaseResponse.success(response);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/bookmark/{bookMarkId}")
-    public BaseResponse<BookMarkResponseDto> getBookMark(@PathVariable Long bookMarkId) {
+    public ResponseEntity<BookMarkResponseDto> getBookMark(@PathVariable Long bookMarkId) {
         BookMarkResponseDto response = bookMarkService.showBookMark(bookMarkId);
-        return BaseResponse.success(response);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/bookmark/{bookMarkId}")
-    public BaseResponse<BookMarkResponseDto> putBookMark(@PathVariable long bookMarkId, @RequestPart BookMarkModifyRequestdto request,
-                                                         @RequestPart(required = false) MultipartFile file) {
+    public ResponseEntity<BookMarkResponseDto> putBookMark(@PathVariable long bookMarkId, @RequestPart BookMarkModifyRequestdto request,
+                                                           @RequestPart(required = false) MultipartFile file) {
         BookMarkResponseDto response = bookMarkService.modifyBookMark(bookMarkId, request, file);
-        return BaseResponse.success(response);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/bookmark/{bookMarkId}")

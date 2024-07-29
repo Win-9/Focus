@@ -7,6 +7,7 @@ import org.example.focus.dto.resopnse.BookListResponseDto;
 import org.example.focus.dto.resopnse.BookResponseDto;
 import org.example.focus.dto.resopnse.CalendarReadInfoResponseDto;
 import org.example.focus.service.BookService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,30 +20,30 @@ public class BookController {
     private final BookService bookService;
 
     @GetMapping("/calendar/{year}/{month}")
-    public BaseResponse<CalendarReadInfoResponseDto> getCalendar(@PathVariable int year, @PathVariable int month) {
+    public ResponseEntity<CalendarReadInfoResponseDto> getCalendar(@PathVariable int year, @PathVariable int month) {
         CalendarReadInfoResponseDto response = bookService.showCalendarData(year, month);
-        return BaseResponse.success(response);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/book/{bookId}")
-    public BaseResponse<BookResponseDto> getBook(@PathVariable long bookId) {
+    public ResponseEntity<BookResponseDto> getBook(@PathVariable long bookId) {
         BookResponseDto response = bookService.showBook(bookId);
-        return BaseResponse.success(response);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/book")
-    public BaseResponse<BookResponseDto> addBook(@RequestPart BookCoverRequestDto request,
-                                                 @RequestPart MultipartFile file) {
+    public ResponseEntity<BookResponseDto> addBook(@RequestPart BookCoverRequestDto request,
+                                                   @RequestPart MultipartFile file) {
         BookResponseDto response = bookService.processBook(request, file);
-        return BaseResponse.success(response);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/book/{bookId}")
-    public BaseResponse<BookResponseDto> putBook(@PathVariable long bookId,
-                                                 @RequestPart BookCoverRequestDto request,
-                                                 @RequestPart(required = false) MultipartFile file) {
+    public ResponseEntity<BookResponseDto> putBook(@PathVariable long bookId,
+                                                   @RequestPart BookCoverRequestDto request,
+                                                   @RequestPart(required = false) MultipartFile file) {
         BookResponseDto response = bookService.modifyBook(bookId, request, file);
-        return BaseResponse.success(response);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/book/{bookId}")
@@ -52,8 +53,8 @@ public class BookController {
     }
 
     @GetMapping("/book/list")
-    public BaseResponse<List<BookListResponseDto>> getBookList() {
+    public ResponseEntity<List<BookListResponseDto>> getBookList() {
         List<BookListResponseDto> response = bookService.showBookList();
-        return BaseResponse.success(response);
+        return ResponseEntity.ok(response);
     }
 }
