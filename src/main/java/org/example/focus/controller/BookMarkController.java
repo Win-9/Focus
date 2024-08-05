@@ -39,7 +39,7 @@ public class BookMarkController {
      * @param bookId
      * @return List<AllBookMarkResponseDto>
      */
-    @GetMapping("/bookmark/list/{bookId}")
+    @GetMapping("/book/{bookId}/bookmarks")
     public ResponseEntity<List<AllBookMarkResponseDto>> getBookMarkList(@PathVariable Long bookId) {
         List<AllBookMarkResponseDto> response = bookMarkService.showBookMarkList(bookId);
         return ResponseEntity.ok(response);
@@ -51,7 +51,7 @@ public class BookMarkController {
      * @param pageable
      * @return AllBookMarkResponsePageDto
      */
-    @GetMapping("/bookmark/list")
+    @GetMapping("/bookmarks")
     public ResponseEntity<AllBookMarkResponsePageDto> getAllBookMarkList(@RequestParam(required = false) Long count, Pageable pageable) {
         AllBookMarkResponsePageDto response = bookMarkService.showAllBookMarkList(pageable, count);
         return ResponseEntity.ok(response);

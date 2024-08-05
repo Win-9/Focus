@@ -85,7 +85,7 @@ public class BookController {
      * 책 전체 조회
      * @return BookListResponseDto
      */
-    @GetMapping("/book/list")
+    @GetMapping("/books")
     public ResponseEntity<List<BookListResponseDto>> getBookList() {
         List<BookListResponseDto> response = bookService.showBookList();
         return ResponseEntity.ok(response);

@@ -20,7 +20,7 @@ public class DashBoardController {
      * 연속일 조회
      * @return ContinuousReadDateResponse
      */
-    @GetMapping("/continue/count")
+    @GetMapping("/count/continue")
     public ResponseEntity<ContinuousReadDateResponse> getContinueCount() {
         ContinuousReadDateResponse response = dashBoardService.getCount();
         return ResponseEntity.ok(response);
@@ -30,7 +30,7 @@ public class DashBoardController {
      * 증가량 조회
      * @return BookMarkCountResponse
      */
-    @GetMapping("/bookmark/count")
+    @GetMapping("/count/bookmark")
     public ResponseEntity<BookMarkCountResponse> getBookMarkCount() {
         BookMarkCountResponse response = dashBoardService.getBookMarkCount();
         return ResponseEntity.ok(response);
