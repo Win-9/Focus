@@ -16,12 +16,20 @@ public class DashBoardController {
 
     private final DashBoardService dashBoardService;
 
+    /**
+     * 연속일 조회
+     * @return ContinuousReadDateResponse
+     */
     @GetMapping("/continue/count")
     public ResponseEntity<ContinuousReadDateResponse> getContinueCount() {
         ContinuousReadDateResponse response = dashBoardService.getCount();
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * 증가량 조회
+     * @return BookMarkCountResponse
+     */
     @GetMapping("/bookmark/count")
     public ResponseEntity<BookMarkCountResponse> getBookMarkCount() {
         BookMarkCountResponse response = dashBoardService.getBookMarkCount();

@@ -21,6 +21,12 @@ import java.util.List;
 public class BookMarkController {
     private final BookMarkService bookMarkService;
 
+    /**
+     * 책갈피 추가
+     * @param request
+     * @param file
+     * @return BookMarkResponseDto
+     */
     @PostMapping("/bookmark")
     public ResponseEntity<BookMarkResponseDto> addBookMark(@RequestPart BookMarkRequestDto request,
                                                            @RequestPart(required = false) MultipartFile file) {
@@ -28,24 +34,47 @@ public class BookMarkController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * 책의 책갈피 전체 조회
+     * @param bookId
+     * @return List<AllBookMarkResponseDto>
+     */
     @GetMapping("/bookmark/list/{bookId}")
     public ResponseEntity<List<AllBookMarkResponseDto>> getBookMarkList(@PathVariable Long bookId) {
         List<AllBookMarkResponseDto> response = bookMarkService.showBookMarkList(bookId);
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * 책갈피 전체 조회
+     * @param count
+     * @param pageable
+     * @return AllBookMarkResponsePageDto
+     */
     @GetMapping("/bookmark/list")
     public ResponseEntity<AllBookMarkResponsePageDto> getAllBookMarkList(@RequestParam(required = false) Long count, Pageable pageable) {
         AllBookMarkResponsePageDto response = bookMarkService.showAllBookMarkList(pageable, count);
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * 단일 책갈피 조회
+     * @param bookMarkId
+     * @return BookMarkResponseDto
+     */
     @GetMapping("/bookmark/{bookMarkId}")
     public ResponseEntity<BookMarkResponseDto> getBookMark(@PathVariable Long bookMarkId) {
         BookMarkResponseDto response = bookMarkService.showBookMark(bookMarkId);
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * 책갈피 수정
+     * @param bookMarkId
+     * @param request
+     * @param file
+     * @return BookMarkResponseDto
+     */
     @PutMapping("/bookmark/{bookMarkId}")
     public ResponseEntity<BookMarkResponseDto> putBookMark(@PathVariable long bookMarkId, @RequestPart BookMarkModifyRequestdto request,
                                                            @RequestPart(required = false) MultipartFile file) {
@@ -53,6 +82,11 @@ public class BookMarkController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * 책갈피 삭제
+     * @param bookMarkId
+     * @return BaseResponse
+     */
     @DeleteMapping("/bookmark/{bookMarkId}")
     public BaseResponse<Object> removeBookMark(@PathVariable long bookMarkId) {
         bookMarkService.deleteBookMark(bookMarkId);
