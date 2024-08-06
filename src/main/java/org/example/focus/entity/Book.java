@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.example.focus.dto.request.BookCoverRequestDto;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter

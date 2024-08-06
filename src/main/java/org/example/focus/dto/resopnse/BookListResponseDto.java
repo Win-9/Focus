@@ -3,8 +3,6 @@ package org.example.focus.dto.resopnse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.example.focus.dto.request.BookCoverRequestDto;
 import org.example.focus.entity.Book;
 
 @Builder
