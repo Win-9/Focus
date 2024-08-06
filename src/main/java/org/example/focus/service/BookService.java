@@ -37,11 +37,8 @@ public class BookService {
     private final BookMarkRepository bookMarkRepository;
 
     public CalendarReadInfoResponseDto showCalendarData(int year, int month) {
-        LocalDateTime startDate = LocalDateTime.of(year, month, 1, 0, 0, 0);
-        LocalDateTime endDate = startDate.withDayOfMonth(startDate.toLocalDate().lengthOfMonth())
-                .withHour(23)
-                .withMinute(59)
-                .withSecond(59);
+        LocalDate startDate = LocalDate.of(year, month, 1);
+        LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
 
         // 책 수정 날짜 추출
         List<LocalDate> bookReadDateList = bookRepository.findAllByModifiedDateBetween(startDate, endDate)
