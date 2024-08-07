@@ -48,7 +48,7 @@ public class BookMarkService {
                 .build();
         bookMark.changeBook(book);
 
-        if (!file.isEmpty()) {
+        if (file != null) {
             String originFilename = getOriginFilename(file);
             String extension = getExtensionFromOriginFilename(originFilename);
 
@@ -103,7 +103,7 @@ public class BookMarkService {
         bookMark.changeBookMarkInfo(request);
         bookMark.changeModifiedDate(LocalDate.now());
 
-        if (!file.isEmpty()) {
+        if (file != null) {
             String originFilename = getOriginFilename(file);
             String extension = getExtensionFromOriginFilename(originFilename);
 

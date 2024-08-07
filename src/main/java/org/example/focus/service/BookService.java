@@ -70,7 +70,7 @@ public class BookService {
                 .registeredDate(LocalDate.now())
                 .build();
 
-        if (!file.isEmpty()) {
+        if (file != null) {
             String originalFilename = getOriginFileName(file);
             String extension = getExtensionFromOriginFilename(originalFilename);
 
