@@ -40,8 +40,8 @@ public class BookMarkController {
      * @return List<AllBookMarkResponseDto>
      */
     @GetMapping("/book/{bookId}/bookmarks")
-    public ResponseEntity<List<AllBookMarkResponseDto>> getBookMarkList(@PathVariable Long bookId) {
-        List<AllBookMarkResponseDto> response = bookMarkService.showBookMarkList(bookId);
+    public ResponseEntity<List<AllBookMarkResponseDto>> getBookMarkList(@PathVariable String bookId) {
+        List<AllBookMarkResponseDto> response = bookMarkService.showBookMarkList(Long.valueOf(bookId));
         return ResponseEntity.ok(response);
     }
 
@@ -63,8 +63,8 @@ public class BookMarkController {
      * @return BookMarkResponseDto
      */
     @GetMapping("/bookmark/{bookMarkId}")
-    public ResponseEntity<BookMarkResponseDto> getBookMark(@PathVariable Long bookMarkId) {
-        BookMarkResponseDto response = bookMarkService.showBookMark(bookMarkId);
+    public ResponseEntity<BookMarkResponseDto> getBookMark(@PathVariable String bookMarkId) {
+        BookMarkResponseDto response = bookMarkService.showBookMark(Long.valueOf(bookMarkId));
         return ResponseEntity.ok(response);
     }
 
@@ -76,9 +76,9 @@ public class BookMarkController {
      * @return BookMarkResponseDto
      */
     @PutMapping("/bookmark/{bookMarkId}")
-    public ResponseEntity<BookMarkResponseDto> putBookMark(@PathVariable long bookMarkId, @RequestPart BookMarkModifyRequestdto request,
+    public ResponseEntity<BookMarkResponseDto> putBookMark(@PathVariable String bookMarkId, @RequestPart BookMarkModifyRequestdto request,
                                                            @RequestPart(required = false) MultipartFile file) {
-        BookMarkResponseDto response = bookMarkService.modifyBookMark(bookMarkId, request, file);
+        BookMarkResponseDto response = bookMarkService.modifyBookMark(Long.parseLong(bookMarkId), request, file);
         return ResponseEntity.ok(response);
     }
 
@@ -88,8 +88,8 @@ public class BookMarkController {
      * @return BaseResponse
      */
     @DeleteMapping("/bookmark/{bookMarkId}")
-    public BaseResponse<Object> removeBookMark(@PathVariable long bookMarkId) {
-        bookMarkService.deleteBookMark(bookMarkId);
+    public BaseResponse<Object> removeBookMark(@PathVariable String bookMarkId) {
+        bookMarkService.deleteBookMark(Long.parseLong(bookMarkId));
         return BaseResponse.success();
     }
 }

@@ -37,7 +37,7 @@ public class BookMarkService {
     private final FileRequestService fileRequestService;
 
     public BookMarkResponseDto processBookMark(BookMarkRequestDto request, MultipartFile file) {
-        Book book = bookRepository.findById(request.getBookId())
+        Book book = bookRepository.findById(Long.valueOf(request.getBookId()))
                 .orElseThrow(() -> new BookNotExistException(ErrorCode.BOOK_NOT_EXIST));
 
         BookMark bookMark = BookMark.builder()

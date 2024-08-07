@@ -37,8 +37,8 @@ public class BookController {
      * @return
      */
     @GetMapping("/book/{bookId}")
-    public ResponseEntity<BookResponseDto> getBook(@PathVariable long bookId) {
-        BookResponseDto response = bookService.showBook(bookId);
+    public ResponseEntity<BookResponseDto> getBook(@PathVariable String bookId) {
+        BookResponseDto response = bookService.showBook(Long.parseLong(bookId));
         return ResponseEntity.ok(response);
     }
 
@@ -63,10 +63,10 @@ public class BookController {
      * @return BookResponseDto
      */
     @PutMapping("/book/{bookId}")
-    public ResponseEntity<BookResponseDto> putBook(@PathVariable long bookId,
+    public ResponseEntity<BookResponseDto> putBook(@PathVariable String bookId,
                                                    @RequestPart BookCoverRequestDto request,
                                                    @RequestPart(required = false) MultipartFile file) {
-        BookResponseDto response = bookService.modifyBook(bookId, request, file);
+        BookResponseDto response = bookService.modifyBook(Long.parseLong(bookId), request, file);
         return ResponseEntity.ok(response);
     }
 
@@ -76,8 +76,8 @@ public class BookController {
      * @return BaseResponse
      */
     @DeleteMapping("/book/{bookId}")
-    public BaseResponse<Object> deleteBook(@PathVariable long bookId) {
-        bookService.removeBook(bookId);
+    public BaseResponse<Object> deleteBook(@PathVariable String bookId) {
+        bookService.removeBook(Long.parseLong(bookId));
         return BaseResponse.success();
     }
 
