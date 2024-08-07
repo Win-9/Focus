@@ -1,9 +1,7 @@
 package org.example.focus.repository;
 
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.example.focus.entity.QBook;
 
 import java.time.LocalDate;
 import java.util.List;

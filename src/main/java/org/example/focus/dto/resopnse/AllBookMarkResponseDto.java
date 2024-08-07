@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AllBookMarkResponseDto {
-    private Long id;
+    private String id;
     private String thumbnailImage;
     private LocalDate date;
     private int page;
@@ -18,7 +18,7 @@ public class AllBookMarkResponseDto {
 
     public static AllBookMarkResponseDto from(BookMark bookMark) {
         return AllBookMarkResponseDto.builder()
-                .id(bookMark.getId())
+                .id(String.valueOf(bookMark.getId()))
                 .thumbnailImage(bookMark.getThumbnailImage())
                 .date(bookMark.getModifiedDate())
                 .page(bookMark.getPage())

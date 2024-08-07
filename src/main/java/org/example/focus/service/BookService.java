@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,11 +36,8 @@ public class BookService {
     private final BookMarkRepository bookMarkRepository;
 
     public CalendarReadInfoResponseDto showCalendarData(int year, int month) {
-        LocalDateTime startDate = LocalDateTime.of(year, month, 1, 0, 0, 0);
-        LocalDateTime endDate = startDate.withDayOfMonth(startDate.toLocalDate().lengthOfMonth())
-                .withHour(23)
-                .withMinute(59)
-                .withSecond(59);
+        LocalDate startDate = LocalDate.of(year, month, 1);
+        LocalDate endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
 
         // 책 수정 날짜 추출
         List<LocalDate> bookReadDateList = bookRepository.findAllByModifiedDateBetween(startDate, endDate)
@@ -67,30 +63,42 @@ public class BookService {
             throw new BookExistException(ErrorCode.EXIST_BOOK);
         }
 
-        String originalFilename = file.getOriginalFilename();
-        if (originalFilename == null || originalFilename.lastIndexOf(".") == -1) {
-            throw new FileBoundException(ErrorCode.EXTENSION_NOT_FOUND);
-        }
-
-        String extension = "";
-        if (originalFilename != null && originalFilename.contains(".")) {
-            extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
-        }
-
         Book book = Book.builder()
                 .title(request.getTitle())
                 .author(request.getAuthor())
-                .extension(extension)
-                .coverImage(EncryptUtil.imageAccessUrl + request.getTitle() + "/" +
-                        request.getTitle() + "bookCover." + extension)
                 .modifiedDate(LocalDate.now())
                 .registeredDate(LocalDate.now())
                 .build();
 
-        String response = fileRequestService.sendBookImageReqeust(ImageRequestDto.of(book), file);
-        log.info("imageHost Save = {}", response);
+        if (file != null) {
+            String originalFilename = getOriginFileName(file);
+            String extension = getExtensionFromOriginFilename(originalFilename);
+
+            book.changeExtension(extension);
+            book.changeCoverImage(EncryptUtil.imageAccessUrl + request.getTitle() + "/" +
+                    request.getTitle() + "bookCover." + extension);
+
+            String response = fileRequestService.sendBookImageReqeust(ImageRequestDto.of(book), file);
+            log.info("imageHost Save = {}", response);
+        }
         bookRepository.save(book);
         return BookResponseDto.from(book);
+    }
+
+    private String getExtensionFromOriginFilename(String originalFilename) {
+        String extension = "";
+        if (originalFilename != null && originalFilename.contains(".")) {
+            extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1);
+        }
+        return extension;
+    }
+
+    private String getOriginFileName(MultipartFile file) {
+        String originalFilename = file.getOriginalFilename();
+        if (originalFilename == null || originalFilename.lastIndexOf(".") == -1) {
+            throw new FileBoundException(ErrorCode.EXTENSION_NOT_FOUND);
+        }
+        return originalFilename;
     }
 
     public List<BookListResponseDto> showBookList() {
@@ -106,12 +114,9 @@ public class BookService {
         book.changeBookInformation(request);
 
         if (file != null) {
-            String originName = file.getOriginalFilename();
-            if (originName == null || originName.lastIndexOf(".") == -1) {
-                throw new FileBoundException(ErrorCode.EXTENSION_NOT_FOUND);
-            }
+            String originFilename = getOriginFileName(file);
+            String extension = getExtensionFromOriginFilename(originFilename);
 
-            String extension = originName.substring(originName.lastIndexOf(".") + 1);
             book.changeExtension(extension);
             book.changeCoverImage(EncryptUtil.imageAccessUrl + request.getTitle() + "/" +
                     request.getTitle() + "bookCover." + extension);

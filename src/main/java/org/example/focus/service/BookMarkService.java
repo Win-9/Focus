@@ -37,32 +37,44 @@ public class BookMarkService {
     private final FileRequestService fileRequestService;
 
     public BookMarkResponseDto processBookMark(BookMarkRequestDto request, MultipartFile file) {
-        Book book = bookRepository.findById(request.getBookId())
+        Book book = bookRepository.findById(Long.valueOf(request.getBookId()))
                 .orElseThrow(() -> new BookNotExistException(ErrorCode.BOOK_NOT_EXIST));
-
-        String originName = file.getOriginalFilename();
-
-        if (originName == null || originName.lastIndexOf(".") == -1) {
-            throw new FileBoundException(ErrorCode.EXTENSION_NOT_FOUND);
-        }
-
-        String extension = originName.substring(originName.lastIndexOf(".") + 1);
 
         BookMark bookMark = BookMark.builder()
                 .date(LocalDate.now())
                 .page(request.getPage())
                 .content(request.getContent())
-                .thumbnailImage(EncryptUtil.imageAccessUrl + book.getTitle() + "/" +
-                        book.getTitle() + "thumbnail" + request.getPage() + "." + extension)
                 .modifiedDate(LocalDate.now())
-                .extension(extension)
                 .build();
         bookMark.changeBook(book);
 
-        String response = fileRequestService.sendBookImageReqeust(ImageRequestDto.of(bookMark), file);
-        log.info("imageHost Save = {}", response);
+        if (file != null) {
+            String originFilename = getOriginFilename(file);
+            String extension = getExtensionFromOriginFilename(originFilename);
+
+            bookMark.changeExtension(extension);
+            bookMark.changeThubnail(EncryptUtil.imageAccessUrl + book.getTitle() + "/" +
+                    book.getTitle() + "thumbnail" + request.getPage() + "." + extension);
+
+            String response = fileRequestService.sendBookImageReqeust(ImageRequestDto.of(bookMark), file);
+            log.info("imageHost Save = {}", response);
+        }
+
         bookMarkRepository.save(bookMark);
         return BookMarkResponseDto.from(bookMark);
+    }
+
+    private String getExtensionFromOriginFilename(String originFilename) {
+        return originFilename.substring(originFilename.lastIndexOf(".") + 1);
+    }
+
+    private String getOriginFilename(MultipartFile file) {
+        String originName = file.getOriginalFilename();
+        if (originName == null || originName.lastIndexOf(".") == -1) {
+            throw new FileBoundException(ErrorCode.EXTENSION_NOT_FOUND);
+        }
+
+        return originName;
     }
 
     public List<AllBookMarkResponseDto> showBookMarkList(Long bookId) {
@@ -92,12 +104,9 @@ public class BookMarkService {
         bookMark.changeModifiedDate(LocalDate.now());
 
         if (file != null) {
-            String originName = file.getOriginalFilename();
-            if (originName == null || originName.lastIndexOf(".") == -1) {
-                throw new FileBoundException(ErrorCode.EXTENSION_NOT_FOUND);
-            }
+            String originFilename = getOriginFilename(file);
+            String extension = getExtensionFromOriginFilename(originFilename);
 
-            String extension = originName.substring(0, originName.lastIndexOf("."));
             bookMark.changeExtension(extension);
             bookMark.changeThubnail(EncryptUtil.imageAccessUrl + bookMark.getBook().getTitle() + "/" +
                     bookMark.getBook().getTitle() + "thumbnail" + request.getPage() + "." + extension);

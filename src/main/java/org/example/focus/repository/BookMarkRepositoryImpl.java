@@ -24,7 +24,7 @@ public class BookMarkRepositoryImpl implements BookMarkRepositoryCustom{
     public Page<AllBookMarkResponseDto> findAllByOrderByModifiedDateDesc(Pageable pageable, Long count) {
         List<AllBookMarkResponseDto> result = queryFactory
                 .select(Projections.fields(AllBookMarkResponseDto.class,
-                        bookMark.id.as("id"),
+                        bookMark.id.stringValue().as("id"),
                         bookMark.modifiedDate.as("date")))
                 .from(bookMark)
                 .orderBy(bookMark.modifiedDate.desc())

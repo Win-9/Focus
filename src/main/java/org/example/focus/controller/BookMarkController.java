@@ -9,6 +9,7 @@ import org.example.focus.dto.resopnse.AllBookMarkResponsePageDto;
 import org.example.focus.dto.resopnse.BookMarkResponseDto;
 import org.example.focus.service.BookMarkService;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,41 +21,75 @@ import java.util.List;
 public class BookMarkController {
     private final BookMarkService bookMarkService;
 
+    /**
+     * 책갈피 추가
+     * @param request
+     * @param file
+     * @return BookMarkResponseDto
+     */
     @PostMapping("/bookmark")
-    public BaseResponse<BookMarkResponseDto> addBookMark(@RequestPart BookMarkRequestDto request,
-                                                         @RequestPart MultipartFile file) {
+    public ResponseEntity<BookMarkResponseDto> addBookMark(@RequestPart BookMarkRequestDto request,
+                                                           @RequestPart(required = false) MultipartFile file) {
         BookMarkResponseDto response = bookMarkService.processBookMark(request, file);
-        return BaseResponse.success(response);
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/bookmark/list/{bookId}")
-    public BaseResponse<List<AllBookMarkResponseDto>> getBookMarkList(@PathVariable Long bookId) {
-        List<AllBookMarkResponseDto> response = bookMarkService.showBookMarkList(bookId);
-        return BaseResponse.success(response);
+    /**
+     * 책의 책갈피 전체 조회
+     * @param bookId
+     * @return List<AllBookMarkResponseDto>
+     */
+    @GetMapping("/book/{bookId}/bookmarks")
+    public ResponseEntity<List<AllBookMarkResponseDto>> getBookMarkList(@PathVariable String bookId) {
+        List<AllBookMarkResponseDto> response = bookMarkService.showBookMarkList(Long.valueOf(bookId));
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/bookmark/list")
-    public BaseResponse<AllBookMarkResponsePageDto> getAllBookMarkList(@RequestParam(required = false) Long count, Pageable pageable) {
+    /**
+     * 책갈피 전체 조회
+     * @param count
+     * @param pageable
+     * @return AllBookMarkResponsePageDto
+     */
+    @GetMapping("/bookmarks")
+    public ResponseEntity<AllBookMarkResponsePageDto> getAllBookMarkList(@RequestParam(required = false) Long count, Pageable pageable) {
         AllBookMarkResponsePageDto response = bookMarkService.showAllBookMarkList(pageable, count);
-        return BaseResponse.success(response);
+        return ResponseEntity.ok(response);
     }
 
+    /**
+     * 단일 책갈피 조회
+     * @param bookMarkId
+     * @return BookMarkResponseDto
+     */
     @GetMapping("/bookmark/{bookMarkId}")
-    public BaseResponse<BookMarkResponseDto> getBookMark(@PathVariable Long bookMarkId) {
-        BookMarkResponseDto response = bookMarkService.showBookMark(bookMarkId);
-        return BaseResponse.success(response);
+    public ResponseEntity<BookMarkResponseDto> getBookMark(@PathVariable String bookMarkId) {
+        BookMarkResponseDto response = bookMarkService.showBookMark(Long.valueOf(bookMarkId));
+        return ResponseEntity.ok(response);
     }
 
+    /**
+     * 책갈피 수정
+     * @param bookMarkId
+     * @param request
+     * @param file
+     * @return BookMarkResponseDto
+     */
     @PutMapping("/bookmark/{bookMarkId}")
-    public BaseResponse<BookMarkResponseDto> putBookMark(@PathVariable long bookMarkId, @RequestPart BookMarkModifyRequestdto request,
-                                                         @RequestPart(required = false) MultipartFile file) {
-        BookMarkResponseDto response = bookMarkService.modifyBookMark(bookMarkId, request, file);
-        return BaseResponse.success(response);
+    public ResponseEntity<BookMarkResponseDto> putBookMark(@PathVariable String bookMarkId, @RequestPart BookMarkModifyRequestdto request,
+                                                           @RequestPart(required = false) MultipartFile file) {
+        BookMarkResponseDto response = bookMarkService.modifyBookMark(Long.parseLong(bookMarkId), request, file);
+        return ResponseEntity.ok(response);
     }
 
+    /**
+     * 책갈피 삭제
+     * @param bookMarkId
+     * @return BaseResponse
+     */
     @DeleteMapping("/bookmark/{bookMarkId}")
-    public BaseResponse<Object> removeBookMark(@PathVariable long bookMarkId) {
-        bookMarkService.deleteBookMark(bookMarkId);
+    public BaseResponse<Object> removeBookMark(@PathVariable String bookMarkId) {
+        bookMarkService.deleteBookMark(Long.parseLong(bookMarkId));
         return BaseResponse.success();
     }
 }
