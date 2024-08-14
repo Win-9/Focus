@@ -8,6 +8,7 @@ import org.example.focus.dto.resopnse.BookResponseDto;
 import org.example.focus.dto.resopnse.CalendarReadInfoResponseDto;
 import org.example.focus.service.BookService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -49,7 +50,7 @@ public class BookController {
      * @return BookResponseDto
      */
     @PostMapping("/book")
-    public ResponseEntity<BookResponseDto> addBook(@RequestPart BookCoverRequestDto request,
+    public ResponseEntity<BookResponseDto> addBook(@Validated @RequestPart BookCoverRequestDto request,
                                                    @RequestPart(required = false) MultipartFile file) {
         BookResponseDto response = bookService.processBook(request, file);
         return ResponseEntity.ok(response);
@@ -64,7 +65,7 @@ public class BookController {
      */
     @PutMapping("/book/{bookId}")
     public ResponseEntity<BookResponseDto> putBook(@PathVariable String bookId,
-                                                   @RequestPart BookCoverRequestDto request,
+                                                   @Validated @RequestPart BookCoverRequestDto request,
                                                    @RequestPart(required = false) MultipartFile file) {
         BookResponseDto response = bookService.modifyBook(Long.parseLong(bookId), request, file);
         return ResponseEntity.ok(response);

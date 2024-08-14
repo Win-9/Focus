@@ -10,6 +10,7 @@ import org.example.focus.dto.resopnse.BookMarkResponseDto;
 import org.example.focus.service.BookMarkService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,7 +29,7 @@ public class BookMarkController {
      * @return BookMarkResponseDto
      */
     @PostMapping("/bookmark")
-    public ResponseEntity<BookMarkResponseDto> addBookMark(@RequestPart BookMarkRequestDto request,
+    public ResponseEntity<BookMarkResponseDto> addBookMark(@Validated @RequestPart BookMarkRequestDto request,
                                                            @RequestPart(required = false) MultipartFile file) {
         BookMarkResponseDto response = bookMarkService.processBookMark(request, file);
         return ResponseEntity.ok(response);
@@ -76,7 +77,7 @@ public class BookMarkController {
      * @return BookMarkResponseDto
      */
     @PutMapping("/bookmark/{bookMarkId}")
-    public ResponseEntity<BookMarkResponseDto> putBookMark(@PathVariable String bookMarkId, @RequestPart BookMarkModifyRequestdto request,
+    public ResponseEntity<BookMarkResponseDto> putBookMark(@PathVariable String bookMarkId, @Validated @RequestPart BookMarkModifyRequestdto request,
                                                            @RequestPart(required = false) MultipartFile file) {
         BookMarkResponseDto response = bookMarkService.modifyBookMark(Long.parseLong(bookMarkId), request, file);
         return ResponseEntity.ok(response);
