@@ -6,11 +6,11 @@ import lombok.Getter;
 
 @Getter
 public class BookMarkModifyRequestdto {
-    @NotNull
-    @NotBlank
+    @NotNull(message = "내용 입력은 필수입니다.")
+    @NotBlank(message = "내용 입력은 필수입니다.")
     private String content;
 
-    @NotNull
-    @NotBlank
+    @NotNull(message = "페이지 입력은 필수입니다.")
+    @NotBlank(message = "페이지 입력은 필수입니다.")
     private int page;
 }

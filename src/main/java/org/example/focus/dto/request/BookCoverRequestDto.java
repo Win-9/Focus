@@ -6,11 +6,11 @@ import lombok.Getter;
 
 @Getter
 public class BookCoverRequestDto {
-    @NotNull
-    @NotBlank
+    @NotNull(message = "제목 입력은 필수입니다.")
+    @NotBlank(message = "제목 입력은 필수입니다.")
     private String title;
 
-    @NotNull
-    @NotBlank
+    @NotNull(message = "저자 입력은 필수입니다.")
+    @NotBlank(message = "저자 입력은 필수입니다.")
     private String author;
 }
