@@ -16,15 +16,22 @@ import org.springframework.stereotype.Service;
 public class MemberService {
     private final MemberRepository memberRepository;
     
-    public void loginMember(LoginReqeust reqeust, HttpServletRequest servletRequest) {
+    public void loginMember(LoginReqeust reqeust, HttpServletRequest httpServletRequest) {
         Member member = memberRepository.findByMemberId(reqeust.getId());
         if (!member.getPassword().equals(reqeust.getPassword())) {
             throw new MemberNotExistException(ErrorCode.MEMBER_NOT_EXIST);
         }
 
-        servletRequest.getSession().invalidate();
-        HttpSession session = servletRequest.getSession(true);
+        httpServletRequest.getSession().invalidate();
+        HttpSession session = httpServletRequest.getSession(true);
         session.setAttribute(SessionConst.LOGIN_USER, reqeust.getId());
         session.setMaxInactiveInterval(1800);
+    }
+
+    public void logoutMember(HttpServletRequest httpServletRequest) {
+        HttpSession session = httpServletRequest.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
     }
 }
