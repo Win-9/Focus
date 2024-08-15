@@ -12,8 +12,8 @@ public enum ErrorCode {
     BOOK_NOT_EXIST(HttpStatus.NOT_FOUND, "존재하지 않는 책 입니다."),
     BOOKMAKR_NOT_EXIST(HttpStatus.NOT_FOUND, "존재하지 않는 책갈피 입니다."),
     IMAGE_SAVE_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 저장에 실패하였습니다."),
-    LOGIN_EXCPETION(HttpStatus.UNAUTHORIZED, "권한이 없습니다")
-
+    LOGIN_EXCPETION(HttpStatus.UNAUTHORIZED, "권한이 없습니다"),
+    MEMBER_NOT_EXIST(HttpStatus.NOT_FOUND, "옳바르지 않은 사용자 정보입니다.")
     ;
 
     private HttpStatus httpStatus;
