@@ -5,12 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.example.focus.common.BaseResponse;
 import org.example.focus.dto.request.LoginReqeust;
 import org.example.focus.service.MemberService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@RestController("/api")
+@RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class LoginController {
     private final MemberService memberService;
