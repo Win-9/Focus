@@ -15,7 +15,6 @@ import org.springframework.util.PatternMatchUtils;
 import java.io.IOException;
 
 @AllArgsConstructor
-@RequiredArgsConstructor
 public class LoginFilter implements Filter {
     private static final String[] whitelist = {"/api/login", "/api/logout"};
     private final ObjectMapper objectMapper;
@@ -31,6 +30,7 @@ public class LoginFilter implements Filter {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.setContentType("application/json;charset=utf-8");
                 response.getWriter().write(objectMapper.writeValueAsString(BaseErrorResopnse.of(ErrorCode.LOGIN_EXCPETION)));
+                return;
             }
         }
         filterChain.doFilter(request, servletResponse);
