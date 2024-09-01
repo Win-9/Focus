@@ -8,6 +8,7 @@ import org.example.focus.dto.resopnse.BookListResponseDto;
 import org.example.focus.dto.resopnse.BookResponseDto;
 import org.example.focus.dto.resopnse.CalendarReadInfoResponseDto;
 import org.example.focus.entity.Book;
+import org.example.focus.entity.Member;
 import org.example.focus.exception.ErrorCode;
 import org.example.focus.exception.exist.BookExistException;
 import org.example.focus.exception.notFound.FileBoundException;
@@ -52,8 +53,8 @@ public class BookService {
         return CalendarReadInfoResponseDto.of(readDateList, year, month);
     }
 
-    public BookResponseDto processBook(BookCoverRequestDto request, MultipartFile file) {
-        boolean isBookExist = bookRepository.existsByTitle(request.getTitle());
+    public BookResponseDto processBook(Member member, BookCoverRequestDto request, MultipartFile file) {
+        boolean isBookExist = bookRepository.existsByMemberIdAndTitle(member.getId(), request.getTitle());
         if (isBookExist) {
             throw new BookExistException(ErrorCode.EXIST_BOOK);
         }
@@ -64,6 +65,7 @@ public class BookService {
                 .modifiedDate(LocalDate.now())
                 .registeredDate(LocalDate.now())
                 .build();
+        book.changeMember(member);
 
         if (file != null) {
             String originalFilename = getOriginFileName(file);
@@ -96,8 +98,8 @@ public class BookService {
         return originalFilename;
     }
 
-    public List<BookListResponseDto> showBookList() {
-        List<Book> bookList = bookRepository.findAllByOrderByModifiedDateDesc();
+    public List<BookListResponseDto> showBookList(Long memberId) {
+        List<Book> bookList = bookRepository.findAllByMemberIdOrderByModifiedDateDesc(memberId);
         return bookList.stream()
                 .map(BookListResponseDto::from)
                 .toList();
@@ -129,8 +131,8 @@ public class BookService {
         bookRepository.delete(book);
     }
 
-    public BookResponseDto showBook(long bookId) {
-        Book book = bookRepository.findById(bookId)
+    public BookResponseDto showBook(long memberId, long bookId) {
+        Book book = bookRepository.findByIdAndMemberId(bookId, memberId)
                 .orElseThrow(() -> new BookNotExistException(ErrorCode.BOOK_NOT_EXIST));
         return BookResponseDto.from(book);
     }

@@ -31,6 +31,10 @@ public class Book {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
+    public void changeMember(Member member) {
+        this.member = member;
+    }
+
     public void changeBookInformation(BookCoverRequestDto requset) {
         this.title = requset.getTitle();
         this.author = requset.getAuthor();

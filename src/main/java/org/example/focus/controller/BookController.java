@@ -41,8 +41,8 @@ public class BookController {
      * @return
      */
     @GetMapping("/book/{bookId}")
-    public ResponseEntity<BookResponseDto> getBook(@PathVariable String bookId) {
-        BookResponseDto response = bookService.showBook(Long.parseLong(bookId));
+    public ResponseEntity<BookResponseDto> getBook(@Login Member member, @PathVariable String bookId) {
+        BookResponseDto response = bookService.showBook(member.getId(), Long.parseLong(bookId));
         return ResponseEntity.ok(response);
     }
 
@@ -53,9 +53,10 @@ public class BookController {
      * @return BookResponseDto
      */
     @PostMapping("/book")
-    public ResponseEntity<BookResponseDto> addBook(@Validated @RequestPart BookCoverRequestDto request,
+    public ResponseEntity<BookResponseDto> addBook(@Login Member member,
+                                                   @Validated @RequestPart BookCoverRequestDto request,
                                                    @RequestPart(required = false) MultipartFile file) {
-        BookResponseDto response = bookService.processBook(request, file);
+        BookResponseDto response = bookService.processBook(member, request, file);
         return ResponseEntity.ok(response);
     }
 
@@ -90,8 +91,8 @@ public class BookController {
      * @return BookListResponseDto
      */
     @GetMapping("/books")
-    public ResponseEntity<List<BookListResponseDto>> getBookList() {
-        List<BookListResponseDto> response = bookService.showBookList();
+    public ResponseEntity<List<BookListResponseDto>> getBookList(@Login Member member) {
+        List<BookListResponseDto> response = bookService.showBookList(member.getId());
         return ResponseEntity.ok(response);
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface BookRepository extends JpaRepository<Book, Long>, BookRepositoryCustom {
 
@@ -15,7 +16,8 @@ public interface BookRepository extends JpaRepository<Book, Long>, BookRepositor
                                                                      @Param("startDate") LocalDate startDate,
                                                                      @Param("endDate") LocalDate endDate);
 
-    List<Book> findAllByOrderByModifiedDateDesc();
+    List<Book> findAllByMemberIdOrderByModifiedDateDesc(long memberId);
 
-    boolean existsByTitle(String title);
+    boolean existsByMemberIdAndTitle(long memberId, String title);
+    Optional<Book> findByIdAndMemberId(long memberId, long id);
 }
