@@ -1,11 +1,13 @@
 package org.example.focus.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.focus.Login;
 import org.example.focus.common.BaseResponse;
 import org.example.focus.dto.request.BookCoverRequestDto;
 import org.example.focus.dto.resopnse.BookListResponseDto;
 import org.example.focus.dto.resopnse.BookResponseDto;
 import org.example.focus.dto.resopnse.CalendarReadInfoResponseDto;
+import org.example.focus.entity.Member;
 import org.example.focus.service.BookService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -27,8 +29,9 @@ public class BookController {
      * @return CalendarReadInfoResponseDto
      */
     @GetMapping("/calendar/{year}/{month}")
-    public ResponseEntity<CalendarReadInfoResponseDto> getCalendar(@PathVariable int year, @PathVariable int month) {
-        CalendarReadInfoResponseDto response = bookService.showCalendarData(year, month);
+    public ResponseEntity<CalendarReadInfoResponseDto> getCalendar(@Login Member member,
+                                                                   @PathVariable int year, @PathVariable int month) {
+        CalendarReadInfoResponseDto response = bookService.showCalendarData(member.getId(), year, month);
         return ResponseEntity.ok(response);
     }
 
