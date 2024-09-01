@@ -27,6 +27,10 @@ public class Book {
     private LocalDate modifiedDate;
     private String extension;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
+
     public void changeBookInformation(BookCoverRequestDto requset) {
         this.title = requset.getTitle();
         this.author = requset.getAuthor();
