@@ -5,7 +5,6 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.focus.Login;
 import org.example.focus.config.SessionConst;
-import org.example.focus.entity.Member;
 import org.example.focus.service.MemberService;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;

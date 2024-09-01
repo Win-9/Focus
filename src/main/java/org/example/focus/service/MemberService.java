@@ -24,7 +24,7 @@ public class MemberService {
 
         httpServletRequest.getSession().invalidate();
         HttpSession session = httpServletRequest.getSession(true);
-        session.setAttribute(SessionConst.LOGIN_USER, reqeust.getId());
+        session.setAttribute(SessionConst.LOGIN_USER, member.getId());
         session.setMaxInactiveInterval(1800);
     }
 
@@ -33,5 +33,10 @@ public class MemberService {
         if (session != null) {
             session.invalidate();
         }
+    }
+
+    public Member getMemberById(Long id) {
+        return memberRepository.findById(id)
+                .orElseThrow(() -> new MemberNotExistException(ErrorCode.MEMBER_NOT_EXIST));
     }
 }
