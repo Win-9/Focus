@@ -10,5 +10,6 @@ import java.util.List;
 public interface BookMarkRepositoryCustom {
     Page<AllBookMarkResponseDto> findAllByOrderByModifiedDateDesc(Pageable pageable, Long count);
     List<LocalDate> findAllBookMarkToLocalDate();
+    List<LocalDate> findAllLocalDateByMemberIdAndModifiedDateBetween(long memberId, LocalDate start, LocalDate end);
     long findBookMarkCountByLocalDateMonth(int month);
 }

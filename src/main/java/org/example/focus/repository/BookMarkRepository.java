@@ -9,6 +9,4 @@ import java.util.List;
 public interface BookMarkRepository extends JpaRepository<BookMark, Long>, BookMarkRepositoryCustom {
 
     List<BookMark> findAllByBookIdOrderByModifiedDateAsc(Long bookId);
-
-    List<BookMark> findAllByModifiedDateBetween(LocalDate startDate, LocalDate endDate);
 }

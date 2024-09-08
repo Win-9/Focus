@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.example.focus.entity.QBookMark.*;
+import static org.example.focus.entity.QMember.*;
+import static org.example.focus.entity.QBook.*;
+
 
 @RequiredArgsConstructor
 public class BookMarkRepositoryImpl implements BookMarkRepositoryCustom{
@@ -45,6 +48,20 @@ public class BookMarkRepositoryImpl implements BookMarkRepositoryCustom{
                 .select(bookMark.modifiedDate)
                 .from(bookMark)
                 .fetch();
+    }
+
+    @Override
+    public List<LocalDate> findAllLocalDateByMemberIdAndModifiedDateBetween(long memberId, LocalDate start, LocalDate end) {
+        return queryFactory
+                .select(bookMark.modifiedDate)
+                .from(book)
+                .join(book.member, member)
+                .join(bookMark).on(bookMark.book.id.eq(book.id))
+                .where(member.id.eq(memberId)
+                        .and(bookMark.modifiedDate.goe(start))
+                        .and(bookMark.modifiedDate.loe(end)))
+                .fetch();
+
     }
 
     @Override

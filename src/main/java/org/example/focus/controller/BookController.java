@@ -1,11 +1,13 @@
 package org.example.focus.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.focus.Login;
 import org.example.focus.common.BaseResponse;
 import org.example.focus.dto.request.BookCoverRequestDto;
 import org.example.focus.dto.resopnse.BookListResponseDto;
 import org.example.focus.dto.resopnse.BookResponseDto;
 import org.example.focus.dto.resopnse.CalendarReadInfoResponseDto;
+import org.example.focus.entity.Member;
 import org.example.focus.service.BookService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -27,8 +29,9 @@ public class BookController {
      * @return CalendarReadInfoResponseDto
      */
     @GetMapping("/calendar/{year}/{month}")
-    public ResponseEntity<CalendarReadInfoResponseDto> getCalendar(@PathVariable int year, @PathVariable int month) {
-        CalendarReadInfoResponseDto response = bookService.showCalendarData(year, month);
+    public ResponseEntity<CalendarReadInfoResponseDto> getCalendar(@Login Member member,
+                                                                   @PathVariable int year, @PathVariable int month) {
+        CalendarReadInfoResponseDto response = bookService.showCalendarData(member.getId(), year, month);
         return ResponseEntity.ok(response);
     }
 
@@ -38,8 +41,8 @@ public class BookController {
      * @return
      */
     @GetMapping("/book/{bookId}")
-    public ResponseEntity<BookResponseDto> getBook(@PathVariable String bookId) {
-        BookResponseDto response = bookService.showBook(Long.parseLong(bookId));
+    public ResponseEntity<BookResponseDto> getBook(@Login Member member, @PathVariable String bookId) {
+        BookResponseDto response = bookService.showBook(member.getId(), Long.parseLong(bookId));
         return ResponseEntity.ok(response);
     }
 
@@ -50,9 +53,10 @@ public class BookController {
      * @return BookResponseDto
      */
     @PostMapping("/book")
-    public ResponseEntity<BookResponseDto> addBook(@Validated @RequestPart BookCoverRequestDto request,
+    public ResponseEntity<BookResponseDto> addBook(@Login Member member,
+                                                   @Validated @RequestPart BookCoverRequestDto request,
                                                    @RequestPart(required = false) MultipartFile file) {
-        BookResponseDto response = bookService.processBook(request, file);
+        BookResponseDto response = bookService.processBook(member, request, file);
         return ResponseEntity.ok(response);
     }
 
@@ -87,8 +91,8 @@ public class BookController {
      * @return BookListResponseDto
      */
     @GetMapping("/books")
-    public ResponseEntity<List<BookListResponseDto>> getBookList() {
-        List<BookListResponseDto> response = bookService.showBookList();
+    public ResponseEntity<List<BookListResponseDto>> getBookList(@Login Member member) {
+        List<BookListResponseDto> response = bookService.showBookList(member.getId());
         return ResponseEntity.ok(response);
     }
 }

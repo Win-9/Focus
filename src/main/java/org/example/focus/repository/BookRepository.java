@@ -2,14 +2,23 @@ package org.example.focus.repository;
 
 import org.example.focus.entity.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface BookRepository extends JpaRepository<Book, Long>, BookRepositoryCustom {
-    List<Book> findAllByModifiedDateBetween(LocalDate startDate, LocalDate endDate);
 
-    List<Book> findAllByOrderByModifiedDateDesc();
+    @Query("SELECT b.modifiedDate FROM Book b WHERE b.member.id = :memberId AND b.modifiedDate BETWEEN :startDate AND :endDate")
+    List<LocalDate> findAllLocalDateByMemberIdAndModifiedDateBetween(@Param("memberId") long memberId,
+                                                                     @Param("startDate") LocalDate startDate,
+                                                                     @Param("endDate") LocalDate endDate);
 
-    boolean existsByTitle(String title);
+    List<Book> findAllByMemberIdOrderByModifiedDateDesc(long memberId);
+
+    boolean existsByMemberIdAndTitle(long memberId, String title);
+    boolean existsByMemberIdAndId(long memberId, long id);
+    Optional<Book> findByIdAndMemberId(long memberId, long id);
 }

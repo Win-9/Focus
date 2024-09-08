@@ -77,8 +77,8 @@ public class BookMarkService {
         return originName;
     }
 
-    public List<AllBookMarkResponseDto> showBookMarkList(Long bookId) {
-        boolean isBookExist = bookRepository.existsById(bookId);
+    public List<AllBookMarkResponseDto> showBookMarkList(Long memberId, Long bookId) {
+        boolean isBookExist = bookRepository.existsByMemberIdAndId(memberId, bookId);
         if (!isBookExist) {
             throw new BookNotExistException(ErrorCode.BOOK_NOT_EXIST);
         }
