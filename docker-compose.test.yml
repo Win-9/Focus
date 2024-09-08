@@ -1,0 +1,24 @@
+services:
+  imageHost:
+    image: win9/imagehost:0.0.2
+    ports:
+      - "2022:2022"
+    volumes:
+      - imagehost-data:/var/lib/imagehost/data
+
+  focus:
+    build: .
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    image: win9/focus:0.0.1
+    restart: on-failure
+    ports:
+      - "8081:8081"
+    volumes:
+      - focus-test-data:/focusTestData/data
+    depends_on:
+      - imageHost
+
+volumes:
+  imagehost-data:
+  focus-test-data:
