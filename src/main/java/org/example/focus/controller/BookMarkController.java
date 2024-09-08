@@ -1,12 +1,14 @@
 package org.example.focus.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.focus.Login;
 import org.example.focus.common.BaseResponse;
 import org.example.focus.dto.request.BookMarkModifyRequestdto;
 import org.example.focus.dto.request.BookMarkRequestDto;
 import org.example.focus.dto.resopnse.AllBookMarkResponseDto;
 import org.example.focus.dto.resopnse.AllBookMarkResponsePageDto;
 import org.example.focus.dto.resopnse.BookMarkResponseDto;
+import org.example.focus.entity.Member;
 import org.example.focus.service.BookMarkService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -41,8 +43,9 @@ public class BookMarkController {
      * @return List<AllBookMarkResponseDto>
      */
     @GetMapping("/book/{bookId}/bookmarks")
-    public ResponseEntity<List<AllBookMarkResponseDto>> getBookMarkList(@PathVariable String bookId) {
-        List<AllBookMarkResponseDto> response = bookMarkService.showBookMarkList(Long.valueOf(bookId));
+    public ResponseEntity<List<AllBookMarkResponseDto>> getBookMarkList(@Login Member member,
+                                                                        @PathVariable String bookId) {
+        List<AllBookMarkResponseDto> response = bookMarkService.showBookMarkList(member.getId(), Long.valueOf(bookId));
         return ResponseEntity.ok(response);
     }
 
@@ -52,8 +55,12 @@ public class BookMarkController {
      * @param pageable
      * @return AllBookMarkResponsePageDto
      */
+
+    //todo @Login을 통한 전체 bookMark조회
     @GetMapping("/bookmarks")
-    public ResponseEntity<AllBookMarkResponsePageDto> getAllBookMarkList(@RequestParam(required = false) Long count, Pageable pageable) {
+    public ResponseEntity<AllBookMarkResponsePageDto> getAllBookMarkList(@Login Member member,
+                                                                         @RequestParam(required = false) Long count,
+                                                                         Pageable pageable) {
         AllBookMarkResponsePageDto response = bookMarkService.showAllBookMarkList(pageable, count);
         return ResponseEntity.ok(response);
     }

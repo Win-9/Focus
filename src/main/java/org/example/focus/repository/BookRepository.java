@@ -19,5 +19,6 @@ public interface BookRepository extends JpaRepository<Book, Long>, BookRepositor
     List<Book> findAllByMemberIdOrderByModifiedDateDesc(long memberId);
 
     boolean existsByMemberIdAndTitle(long memberId, String title);
+    boolean existsByMemberIdAndId(long memberId, long id);
     Optional<Book> findByIdAndMemberId(long memberId, long id);
 }
