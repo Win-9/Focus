@@ -62,8 +62,8 @@ jobs:
           DOCKER_BUILDKIT: 1
           COMPOSE_DOCKER_CLI_BUILD: 1
         run: |
-          docker-compose -f docker-compose.yml build
-          docker-compose -f docker-compose.yml push
+          docker-compose -f docker-compose.test.yml build
+          docker-compose -f docker-compose.test.yml push
 
   deploy:
     runs-on: ubuntu-latest
