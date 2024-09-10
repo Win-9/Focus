@@ -2,7 +2,7 @@ services:
   imageHost:
     image: win9/imagehost:0.0.2
     ports:
-      - "2022:2022"
+      - "2023:2023"
     volumes:
       - imagehost-data:/var/lib/imagehost/data
 
