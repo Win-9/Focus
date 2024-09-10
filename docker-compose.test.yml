@@ -7,7 +7,6 @@ services:
       - imagehost-data:/var/lib/imagehost/data
 
   focus:
-    build: .
     extra_hosts:
       - "host.docker.internal:host-gateway"
     image: win9/focus:0.1.1
