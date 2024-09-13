@@ -28,9 +28,12 @@ jobs:
           touch ./src/main/resources/env/mysql.yml
           touch ./src/main/resources/env/port.yml
           touch ./src/main/resources/env/image.yml
+          touch ./src/main/resources/env/redis.yml
+
           printf "%s" "${{ secrets.MYSQL}}" > ./src/main/resources/env/mysql.yml
           printf "%s" "${{ secrets.SERVICE_PORT}}" > ./src/main/resources/env/port.yml
           printf "%s" "${{ secrets.IMAGE}}" > ./src/main/resources/env/image.yml
+          printf "%s" "${{ secrets.REDIS}}" > ./src/main/resources/env/redis.yml
 
       - name: gradlew 권한 설정
         run: |
