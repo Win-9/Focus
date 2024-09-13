@@ -1,6 +1,6 @@
 services:
   imageHost:
-    image: win9/imagehost:0.0.2
+    image: win9/imagehost:0.1.2
     ports:
       - "2023:2023"
     volumes:
@@ -12,7 +12,7 @@ services:
     image: win9/focus:0.1.1
     restart: on-failure
     ports:
-      - "8081:8081"
+      - "8181:8181"
     volumes:
       - focus-test-data:/focusTestData/data
     depends_on:
