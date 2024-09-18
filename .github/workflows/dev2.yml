@@ -31,8 +31,8 @@ jobs:
           touch ./src/main/resources/env/redis.yml
 
           printf "%s" "${{ secrets.MYSQL}}" > ./src/main/resources/env/mysql.yml
-          printf "%s" "${{ secrets.SERVICE_PORT}}" > ./src/main/resources/env/port.yml
-          printf "%s" "${{ secrets.IMAGE}}" > ./src/main/resources/env/image.yml
+          printf "%s" "${{ secrets.SERVICE_PORT_TEST}}" > ./src/main/resources/env/port.yml
+          printf "%s" "${{ secrets.IMAGE_TEST}}" > ./src/main/resources/env/image.yml
           printf "%s" "${{ secrets.REDIS}}" > ./src/main/resources/env/redis.yml
 
       - name: gradlew 권한 설정
@@ -59,14 +59,6 @@ jobs:
         run: |
           pwd
           ls -al
-
-      - name: Build and push Docker images
-        env:
-          DOCKER_BUILDKIT: 1
-          COMPOSE_DOCKER_CLI_BUILD: 1
-        run: |
-          docker-compose -p test -f docker-compose.test.yml build
-          docker-compose -p test -f docker-compose.test.yml push
 
   deploy:
     runs-on: ubuntu-latest
