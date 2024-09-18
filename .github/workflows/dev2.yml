@@ -78,4 +78,5 @@ jobs:
           script: |
             cd ${{ secrets.REMOTE_DIRECTORY }}
             docker-compose -p test -f docker-compose.test.yml down
+            docker-compose -p test -f docker-compose.test.yml pull
             docker-compose -p test -f docker-compose.test.yml up -d
