@@ -54,6 +54,17 @@ jobs:
       - name: Install Docker Compose
         run: |
           sudo apt-get install -y docker-compose
+          
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build Docker image
+        run: |
+          docker build -t ${{secrets.TEST_SERVER_DOCKER_IMAGE}} .
+
+      - name: Push Docker image
+        run: |
+          docker push ${{secrets.TEST_SERVER_DOCKER_IMAGE}}
 
       - name: 확인용 디버그 명령어
         run: |
