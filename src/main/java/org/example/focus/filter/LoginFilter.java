@@ -48,7 +48,7 @@ public class LoginFilter implements Filter {
         response.getWriter().write(objectMapper.writeValueAsString(BaseErrorResopnse.of(ErrorCode.LOGIN_EXCPETION)));
     }
 
-    private static boolean checkWhitelist(String requestURI) {
+    private boolean checkWhitelist(String requestURI) {
         return !PatternMatchUtils.simpleMatch(whitelist, requestURI);
     }
 }
