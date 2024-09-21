@@ -10,6 +10,7 @@ import org.example.focus.dto.resopnse.CalendarReadInfoResponseDto;
 import org.example.focus.entity.Member;
 import org.example.focus.service.BookService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@Transactional
 public class BookController {
     private final BookService bookService;
 
@@ -29,6 +31,7 @@ public class BookController {
      * @return CalendarReadInfoResponseDto
      */
     @GetMapping("/calendar/{year}/{month}")
+    @Transactional(readOnly = true)
     public ResponseEntity<CalendarReadInfoResponseDto> getCalendar(@Login Member member,
                                                                    @PathVariable int year, @PathVariable int month) {
         CalendarReadInfoResponseDto response = bookService.showCalendarData(member.getId(), year, month);
@@ -41,6 +44,7 @@ public class BookController {
      * @return
      */
     @GetMapping("/book/{bookId}")
+    @Transactional(readOnly = true)
     public ResponseEntity<BookResponseDto> getBook(@Login Member member, @PathVariable String bookId) {
         BookResponseDto response = bookService.showBook(member.getId(), Long.parseLong(bookId));
         return ResponseEntity.ok(response);
@@ -92,6 +96,7 @@ public class BookController {
      * @return BookListResponseDto
      */
     @GetMapping("/books")
+    @Transactional(readOnly = true)
     public ResponseEntity<List<BookListResponseDto>> getBookList(@Login Member member) {
         List<BookListResponseDto> response = bookService.showBookList(member.getId());
         return ResponseEntity.ok(response);

@@ -12,6 +12,7 @@ import org.example.focus.entity.Member;
 import org.example.focus.service.BookMarkService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@Transactional
 public class BookMarkController {
     private final BookMarkService bookMarkService;
 
@@ -43,6 +45,7 @@ public class BookMarkController {
      * @return List<AllBookMarkResponseDto>
      */
     @GetMapping("/book/{bookId}/bookmarks")
+    @Transactional(readOnly = true)
     public ResponseEntity<List<AllBookMarkResponseDto>> getBookMarkList(@Login Member member,
                                                                         @PathVariable String bookId) {
         List<AllBookMarkResponseDto> response = bookMarkService.showBookMarkList(member.getId(), Long.valueOf(bookId));
@@ -56,6 +59,7 @@ public class BookMarkController {
      * @return AllBookMarkResponsePageDto
      */
     @GetMapping("/bookmarks")
+    @Transactional(readOnly = true)
     public ResponseEntity<AllBookMarkResponsePageDto> getAllBookMarkList(@Login Member member,
                                                                          @RequestParam(required = false) Long count,
                                                                          Pageable pageable) {
@@ -69,6 +73,7 @@ public class BookMarkController {
      * @return BookMarkResponseDto
      */
     @GetMapping("/bookmark/{bookMarkId}")
+    @Transactional(readOnly = true)
     public ResponseEntity<BookMarkResponseDto> getBookMark(@Login Member member, @PathVariable String bookMarkId) {
         BookMarkResponseDto response = bookMarkService.showBookMark(member.getId(), Long.valueOf(bookMarkId));
         return ResponseEntity.ok(response);

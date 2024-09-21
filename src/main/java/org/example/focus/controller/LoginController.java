@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.focus.common.BaseResponse;
 import org.example.focus.dto.request.LoginReqeust;
 import org.example.focus.service.MemberService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,6 +15,7 @@ public class LoginController {
     private final MemberService memberService;
 
     @PostMapping("/login")
+    @Transactional
     public BaseResponse<Object> postLogin(@RequestBody LoginReqeust reqeust, HttpServletRequest httpServletRequest) {
         memberService.loginMember(reqeust, httpServletRequest);
         return BaseResponse.success();
