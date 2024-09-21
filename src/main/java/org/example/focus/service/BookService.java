@@ -105,8 +105,8 @@ public class BookService {
                 .toList();
     }
 
-    public BookResponseDto modifyBook(long bookId, BookCoverRequestDto request, MultipartFile file) {
-        Book book = bookRepository.findById(bookId)
+    public BookResponseDto modifyBook(long memberId, long bookId, BookCoverRequestDto request, MultipartFile file) {
+        Book book = bookRepository.findByIdAndMemberId(memberId, bookId)
                 .orElseThrow(() -> new BookNotExistException(ErrorCode.BOOK_NOT_EXIST));
         book.changeBookInformation(request);
 
@@ -125,8 +125,8 @@ public class BookService {
         return BookResponseDto.from(book);
     }
 
-    public void removeBook(long bookId) {
-        Book book = bookRepository.findById(bookId)
+    public void removeBook(Long memberId, long bookId) {
+        Book book = bookRepository.findByIdAndMemberId(memberId, bookId)
                 .orElseThrow(() -> new BookNotExistException(ErrorCode.BOOK_NOT_EXIST));
         bookRepository.delete(book);
     }

@@ -24,12 +24,13 @@ public class BookMarkRepositoryImpl implements BookMarkRepositoryCustom{
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<AllBookMarkResponseDto> findAllByOrderByModifiedDateDesc(Pageable pageable, Long count) {
+    public Page<AllBookMarkResponseDto> findAllByOrderByModifiedDateDesc(Pageable pageable, Long count, Long memberId) {
         List<AllBookMarkResponseDto> result = queryFactory
                 .select(Projections.fields(AllBookMarkResponseDto.class,
                         bookMark.id.stringValue().as("id"),
                         bookMark.modifiedDate.as("date")))
                 .from(bookMark)
+                .join(member).on(member.id.eq(memberId))
                 .orderBy(bookMark.modifiedDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

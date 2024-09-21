@@ -68,10 +68,11 @@ public class BookController {
      * @return BookResponseDto
      */
     @PutMapping("/book/{bookId}")
-    public ResponseEntity<BookResponseDto> putBook(@PathVariable String bookId,
+    public ResponseEntity<BookResponseDto> putBook(@Login Member member,
+                                                   @PathVariable String bookId,
                                                    @Validated @RequestPart BookCoverRequestDto request,
                                                    @RequestPart(required = false) MultipartFile file) {
-        BookResponseDto response = bookService.modifyBook(Long.parseLong(bookId), request, file);
+        BookResponseDto response = bookService.modifyBook(member.getId(), Long.parseLong(bookId), request, file);
         return ResponseEntity.ok(response);
     }
 
@@ -81,8 +82,8 @@ public class BookController {
      * @return BaseResponse
      */
     @DeleteMapping("/book/{bookId}")
-    public BaseResponse<Object> deleteBook(@PathVariable String bookId) {
-        bookService.removeBook(Long.parseLong(bookId));
+    public BaseResponse<Object> deleteBook(@Login Member member, @PathVariable String bookId) {
+        bookService.removeBook(member.getId(), Long.parseLong(bookId));
         return BaseResponse.success();
     }
 

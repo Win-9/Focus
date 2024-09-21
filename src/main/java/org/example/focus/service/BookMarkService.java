@@ -90,14 +90,14 @@ public class BookMarkService {
                 .toList();
     }
 
-    public BookMarkResponseDto showBookMark(Long bookMarkId) {
-        return bookMarkRepository.findById(bookMarkId)
+    public BookMarkResponseDto showBookMark(Long memberId, Long bookMarkId) {
+        return bookMarkRepository.findBymemberIdAndId(memberId, bookMarkId)
                 .map(BookMarkResponseDto::from)
                 .orElseThrow(() -> new BookMarkNotExistException(ErrorCode.BOOKMAKR_NOT_EXIST));
     }
 
-    public BookMarkResponseDto modifyBookMark(long bookMarkId, BookMarkModifyRequestdto request, MultipartFile file) {
-        BookMark bookMark = bookMarkRepository.findById(bookMarkId)
+    public BookMarkResponseDto modifyBookMark(long memberId, long bookMarkId, BookMarkModifyRequestdto request, MultipartFile file) {
+        BookMark bookMark = bookMarkRepository.findBymemberIdAndId(memberId, bookMarkId)
                 .orElseThrow(() -> new BookMarkNotExistException(ErrorCode.BOOKMAKR_NOT_EXIST));
 
         bookMark.changeBookMarkInfo(request);
@@ -120,15 +120,15 @@ public class BookMarkService {
         return BookMarkResponseDto.from(bookMark);
     }
 
-    public void deleteBookMark(long bookMarkId) {
-        BookMark bookMark = bookMarkRepository.findById(bookMarkId)
+    public void deleteBookMark(Long memberId, long bookMarkId) {
+        BookMark bookMark = bookMarkRepository.findBymemberIdAndId(memberId, bookMarkId)
                 .orElseThrow(() -> new BookMarkNotExistException(ErrorCode.BOOKMAKR_NOT_EXIST));
         bookMarkRepository.delete(bookMark);
         fileRequestService.deleteBookImage(ImageRequestDto.of(bookMark));
     }
 
-    public AllBookMarkResponsePageDto showAllBookMarkList(Pageable pageable, Long count) {
-        Page<AllBookMarkResponseDto> pageResult = bookMarkRepository.findAllByOrderByModifiedDateDesc(pageable, count);
+    public AllBookMarkResponsePageDto showAllBookMarkList(Long memberId, Pageable pageable, Long count) {
+        Page<AllBookMarkResponseDto> pageResult = bookMarkRepository.findAllByOrderByModifiedDateDesc(pageable, count, memberId);
         List<AllBookMarkResponseDto> list = pageResult.getContent();
         LinkedHashMap<LocalDate, List<AllBookMarkResponseDto>> collect = list.stream()
                 .collect(Collectors.groupingBy(
