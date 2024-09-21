@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface BookMarkRepositoryCustom {
-    Page<AllBookMarkResponseDto> findAllByOrderByModifiedDateDesc(Pageable pageable, Long count);
+    Page<AllBookMarkResponseDto> findAllByOrderByModifiedDateDesc(Pageable pageable, Long count, Long memberId);
     List<LocalDate> findAllBookMarkToLocalDate();
     List<LocalDate> findAllLocalDateByMemberIdAndModifiedDateBetween(long memberId, LocalDate start, LocalDate end);
     long findBookMarkCountByLocalDateMonth(int month);

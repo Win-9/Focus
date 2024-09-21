@@ -58,14 +58,12 @@ public class BookMarkController {
      * @param pageable
      * @return AllBookMarkResponsePageDto
      */
-
-    //todo @Login을 통한 전체 bookMark조회
     @GetMapping("/bookmarks")
     @Transactional(readOnly = true)
     public ResponseEntity<AllBookMarkResponsePageDto> getAllBookMarkList(@Login Member member,
                                                                          @RequestParam(required = false) Long count,
                                                                          Pageable pageable) {
-        AllBookMarkResponsePageDto response = bookMarkService.showAllBookMarkList(pageable, count);
+        AllBookMarkResponsePageDto response = bookMarkService.showAllBookMarkList(member.getId(), pageable, count);
         return ResponseEntity.ok(response);
     }
 
@@ -76,8 +74,8 @@ public class BookMarkController {
      */
     @GetMapping("/bookmark/{bookMarkId}")
     @Transactional(readOnly = true)
-    public ResponseEntity<BookMarkResponseDto> getBookMark(@PathVariable String bookMarkId) {
-        BookMarkResponseDto response = bookMarkService.showBookMark(Long.valueOf(bookMarkId));
+    public ResponseEntity<BookMarkResponseDto> getBookMark(@Login Member member, @PathVariable String bookMarkId) {
+        BookMarkResponseDto response = bookMarkService.showBookMark(member.getId(), Long.valueOf(bookMarkId));
         return ResponseEntity.ok(response);
     }
 
@@ -89,9 +87,9 @@ public class BookMarkController {
      * @return BookMarkResponseDto
      */
     @PutMapping("/bookmark/{bookMarkId}")
-    public ResponseEntity<BookMarkResponseDto> putBookMark(@PathVariable String bookMarkId, @Validated @RequestPart BookMarkModifyRequestdto request,
+    public ResponseEntity<BookMarkResponseDto> putBookMark(@Login Member member, @PathVariable String bookMarkId, @Validated @RequestPart BookMarkModifyRequestdto request,
                                                            @RequestPart(required = false) MultipartFile file) {
-        BookMarkResponseDto response = bookMarkService.modifyBookMark(Long.parseLong(bookMarkId), request, file);
+        BookMarkResponseDto response = bookMarkService.modifyBookMark(member.getId(), Long.parseLong(bookMarkId), request, file);
         return ResponseEntity.ok(response);
     }
 
@@ -101,8 +99,8 @@ public class BookMarkController {
      * @return BaseResponse
      */
     @DeleteMapping("/bookmark/{bookMarkId}")
-    public BaseResponse<Object> removeBookMark(@PathVariable String bookMarkId) {
-        bookMarkService.deleteBookMark(Long.parseLong(bookMarkId));
+    public BaseResponse<Object> removeBookMark(@Login Member member, @PathVariable String bookMarkId) {
+        bookMarkService.deleteBookMark(member.getId(), Long.parseLong(bookMarkId));
         return BaseResponse.success();
     }
 }
