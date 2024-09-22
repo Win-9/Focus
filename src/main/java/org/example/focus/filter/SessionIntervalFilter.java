@@ -19,6 +19,8 @@ public class SessionIntervalFilter implements Filter {
         if (checkWhitelist(requestURI) && request.getSession(false) != null) {
             request.getSession().setMaxInactiveInterval(1800);
         }
+
+        filterChain.doFilter(request, servletResponse);
     }
 
     private boolean checkWhitelist(String requestURI) {
