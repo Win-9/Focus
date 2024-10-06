@@ -33,5 +33,10 @@ spring:
       hibernate:
         format_sql: true
 
+
 server:
   port: ${server_port}
+logging:
+  level.org.hibernate:
+    SQL: DEBUG
+    orm.jdbc.bind: TRACE
