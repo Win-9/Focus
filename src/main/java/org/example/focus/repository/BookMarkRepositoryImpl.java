@@ -30,15 +30,20 @@ public class BookMarkRepositoryImpl implements BookMarkRepositoryCustom{
                         bookMark.id.stringValue().as("id"),
                         bookMark.modifiedDate.as("date")))
                 .from(bookMark)
-                .join(member).on(member.id.eq(memberId))
+                .join(book).on(bookMark.id.eq(book.id))
+                .where(book.member.id.eq(memberId))
                 .orderBy(bookMark.modifiedDate.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
+
         JPAQuery<BookMark> countQuery = queryFactory
                 .select(bookMark)
-                .from(bookMark);
+                .from(bookMark)
+                .join(book).on(bookMark.id.eq(book.id))
+                .where(book.member.id.eq(memberId));
+
         long totalCount = Optional.ofNullable(count).orElseGet(countQuery::fetchCount);
         return new PageImpl<>(result, pageable, totalCount);
     }
