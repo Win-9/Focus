@@ -5,6 +5,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.example.focus.dto.resopnse.AllBookMarkResponseDto;
+import org.example.focus.dto.resopnse.BookResponseDto;
 import org.example.focus.entity.BookMark;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -28,7 +29,16 @@ public class BookMarkRepositoryImpl implements BookMarkRepositoryCustom{
         List<AllBookMarkResponseDto> result = queryFactory
                 .select(Projections.fields(AllBookMarkResponseDto.class,
                         bookMark.id.stringValue().as("id"),
-                        bookMark.modifiedDate.as("date")))
+                        bookMark.modifiedDate.as("date"),
+                        bookMark.page.as("page"),
+                        bookMark.thumbnailImage.as("thumbnailImage"),
+                        Projections.fields(BookResponseDto.class,
+                                        book.id.stringValue().as("id"),
+                                        book.title.stringValue().as("title"),
+                                        book.author.stringValue().as("author"),
+                                        book.coverImage.stringValue().as("coverImageUrl")
+                                ).as("book")
+                        ))
                 .from(bookMark)
                 .join(book).on(bookMark.id.eq(book.id))
                 .where(book.member.id.eq(memberId))
@@ -36,7 +46,6 @@ public class BookMarkRepositoryImpl implements BookMarkRepositoryCustom{
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-
 
         JPAQuery<BookMark> countQuery = queryFactory
                 .select(bookMark)
